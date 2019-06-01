@@ -15,7 +15,7 @@ class User(BaseModel):
     photo_path = CharField(null=True)
     bio = TextField(null=True)
     phone = CharField(null=True)
-    date_of_reg = DateField(datetime.date(datetime.now()))
+    date_of_reg = DateField(default=datetime.date(datetime.now()))
     email = CharField(null=True)
     balance = FloatField(default=0)
     is_premium = BooleanField(default=False)
@@ -25,15 +25,15 @@ class User(BaseModel):
 class Track(BaseModel):
     author = ForeignKeyField(User, backref="songs")
     title = CharField()
-    date_of_pub = DateField(datetime.date(datetime.now()))
+    date_of_pub = DateField(default=datetime.date(datetime.now()))
     duration = SmallIntegerField(null=True)  # in seconds
-    filepath = CharField()
+    file_path = CharField()
 
 
 class Playlist(BaseModel):
     author = ForeignKeyField(User, backref="playlists")
     title = CharField()
-    date_of_creation = DateField(datetime.date(datetime.now()))
+    date_of_creation = DateField(default=datetime.date(datetime.now()))
     last_update = DateField(null=True)
     description = TextField(null=True)
     photo_path = CharField(null=True)
@@ -61,3 +61,7 @@ class TrackGenre(BaseModel):
 class Subscription(BaseModel):
     subscriber = ForeignKeyField(User, backref="subscriptions", null=True)
     subscribed_user = ForeignKeyField(User, backref="subscribers", null=True)
+
+
+
+
