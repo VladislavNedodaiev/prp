@@ -35,8 +35,8 @@ def create_user():
     except AlreadyExists as e:
         return jsonify({'message': str(e)}), 400
 
-    responce = _user_data_to_dict(user)
-    return jsonify(responce), 200
+    response = _user_data_to_dict(user)
+    return jsonify(response), 200
 
 
 def _user_data_to_dict(user: User) -> dict:
