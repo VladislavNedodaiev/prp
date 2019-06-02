@@ -11,3 +11,8 @@ class MissingArgument(Exception):
 class AlreadyExists(Exception):
     def __init__(self):
         Exception.__init__(self, f"Object already exists")
+
+
+class InvalidFile(Exception):
+    def __init__(self):
+        Exception.__init__(self, "Invalid file")
