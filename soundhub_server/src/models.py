@@ -63,5 +63,8 @@ class Subscription(BaseModel):
     subscribed_user = ForeignKeyField(User, backref="subscribers", null=True)
 
 
-
+def create_tables():
+    MODELS = [User, Track, Playlist, PlaylistTracks, Like, Genre, TrackGenre, Subscription]
+    db.connect()
+    db.create_tables(MODELS)
 

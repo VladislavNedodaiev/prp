@@ -1,6 +1,7 @@
 import unittest
 from src.db_driver import Driver
 from src.models import *
+from src.errors import *
 
 MODELS = [User, Track, Playlist, PlaylistTracks, Like, Genre, TrackGenre, Subscription]
 test_db = SqliteDatabase(':memory:')
@@ -55,7 +56,7 @@ class TestUser(BaseTestCase):
     def test_register_exists(self):
         driver = Driver()
 
-        with self.assertRaises(IntegrityError):
+        with self.assertRaises(AlreadyExists):
             user1 = driver.register('same_username', 'testpassword1', 'testemail1@gmail.com')
             user2 = driver.register('same_username', 'testpassword2', 'testemail2@gmail.com')
             user1.save()
@@ -69,6 +70,15 @@ class TestUser(BaseTestCase):
 
         self.assertEqual(driver.auth(user.username, user_password), True)
         self.assertEqual(driver.auth(user.username, user.password_hash), False)
+
+    def test_get_by_username(self):
+        driver = Driver()
+        username = 'testusername'
+        user = driver.register(username, 'testpassword228', 'testemail@gmail.com')
+
+        self.assertEqual(user.username, username)
+        with self.assertRaises(UserDoesNotExists):
+            driver.get_by_username('not_existing_username')
 
 
 if __name__ == '__main__':
