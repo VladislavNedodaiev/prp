@@ -1,12 +1,17 @@
 import json
 
 from flask import Blueprint, request, jsonify
+from werkzeug import exceptions
 
 from src.db_driver import Driver
 from src.errors import *
 from src.models import *
 
 user_api = Blueprint('user_api', __name__)
+
+UPLOAD_PHOTO_FOLDER = '../Media/Photo/'
+UPLOAD_TRACK_FOLDER = '../Media/Audio/'
+PHOTO_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 
 @user_api.route("/<string:username>", methods=['GET'])
@@ -39,6 +44,21 @@ def create_user():
     return jsonify(response), 200
 
 
+@user_api.route("/<string:username>/set_photo", methods=['POST'])
+def set_photo(username: str):
+    try:
+        driver = Driver()
+        user = driver.get_by_username(username)
+        file = request.files['photo']
+        user = driver.set_user_photo(user, file)
+        response = _user_data_to_dict(user)
+        return jsonify(response), 200
+    except (UserDoesNotExists, InvalidFile)as e:
+        return jsonify({'message': str(e)})
+    except exceptions.HTTPException:
+        return jsonify({'message': "Missing 'photo' key"}), 400
+
+
 def _user_data_to_dict(user: User) -> dict:
     user_data = {
         'username': user.username,
@@ -47,6 +67,7 @@ def _user_data_to_dict(user: User) -> dict:
         'date_of_reg': user.date_of_reg,
         'balance': user.balance,
         'is_premium': user.is_premium,
-        'premium_exp_date': user.premium_exp_date
+        'premium_exp_date': user.premium_exp_date,
+        'photo_path': user.photo_path
     }
     return user_data
