@@ -14,28 +14,6 @@ class BaseTestCase(unittest.TestCase):
         test_db.connect()
         test_db.create_tables(MODELS)
 
-        user1 = User(
-            username='user1',
-            password_hash='12345678',
-            email="user1@gmail.com"
-        )
-
-        user2 = User(
-            username='user2',
-            password_hash='23456789',
-            email="user2@mail.com"
-        )
-
-        user3 = User(
-            username='user3',
-            password_hash='34567890',
-            email="user3@gmail.com"
-        )
-
-        user1.save()
-        user2.save()
-        user3.save()
-
     def tearDown(self):
         test_db.drop_tables(MODELS)
         test_db.close()
@@ -44,8 +22,15 @@ class BaseTestCase(unittest.TestCase):
 class TestUser(BaseTestCase):
 
     def test_db_connection(self):
+        user1 = User(
+            username='user1',
+            password_hash='12345678',
+            email="user1@gmail.com"
+        )
+        user1.save()
+
         users_count = len(User.select())
-        self.assertEqual(users_count, 3)
+        self.assertEqual(users_count, 1)
 
     def test_register(self):
         driver = Driver()
