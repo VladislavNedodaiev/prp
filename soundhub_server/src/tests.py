@@ -1,5 +1,5 @@
 import unittest
-from src.db_driver import Driver
+from src.db_driver import UserDriver
 from src.models import *
 from src.errors import *
 
@@ -33,13 +33,13 @@ class TestUser(BaseTestCase):
         self.assertEqual(users_count, 1)
 
     def test_register(self):
-        driver = Driver()
+        driver = UserDriver()
 
         user = driver.register('testusername', 'testpassword', 'testemail@gmail.com')
         self.assertEqual(user, User.get(User.username == 'testusername'))
 
     def test_register_exists(self):
-        driver = Driver()
+        driver = UserDriver()
 
         with self.assertRaises(AlreadyExists):
             user1 = driver.register('same_username', 'testpassword1', 'testemail1@gmail.com')
@@ -48,7 +48,7 @@ class TestUser(BaseTestCase):
             user2.save()
 
     def test_auth(self):
-        driver = Driver()
+        driver = UserDriver()
 
         user_password = 'sajb4aisNsa83'
         user = driver.register('testusername', user_password, 'testemail@gmail.com')
@@ -57,7 +57,7 @@ class TestUser(BaseTestCase):
         self.assertEqual(driver.auth(user.username, user.password_hash), False)
 
     def test_get_by_username(self):
-        driver = Driver()
+        driver = UserDriver()
         username = 'testusername'
         user = driver.register(username, 'testpassword228', 'testemail@gmail.com')
 

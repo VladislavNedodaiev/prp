@@ -6,7 +6,7 @@ from src.models import *
 from src.errors import *
 
 
-class Driver:
+class UserDriver:
     UPLOAD_PHOTO_FOLDER = '../Media/Photo/'
     PHOTO_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -34,14 +34,15 @@ class Driver:
     def set_user_photo(self, user, file):
         try:
             self._allowed_photo(file.filename)
+            print(type(file))
         except InvalidFile:
             raise
-
+        self.delete_user_photo(user)
         filename = self._rename_photo(file.filename, user.username)
+
         filepath = os.path.join(self.UPLOAD_PHOTO_FOLDER, filename)
         file.save(filepath)
         self._rename_photo(filename, user.username)
-
         user.photo_path = filepath
         user.save()
         return user
@@ -63,3 +64,9 @@ class Driver:
         ext = filename[ext_index:]
         new_filename = f'{username}_profile{ext}'
         return new_filename
+
+    def delete_user_photo(self, user):
+        try:
+            os.remove(user.photo_path)
+        except OSError:
+            pass

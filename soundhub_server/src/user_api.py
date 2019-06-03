@@ -3,7 +3,7 @@ import json
 from flask import Blueprint, request, jsonify
 from werkzeug import exceptions
 
-from src.db_driver import Driver
+from src.db_driver import UserDriver
 from src.errors import *
 from src.models import *
 
@@ -17,7 +17,7 @@ PHOTO_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 @user_api.route("/<string:username>", methods=['GET'])
 def get_user(username: str):
     try:
-        driver = Driver()
+        driver = UserDriver()
         user = driver.get_by_username(username)
     except UserDoesNotExists as e:
         return jsonify({'message': str(e)}), 404
@@ -34,7 +34,7 @@ def create_user():
     if not all([arg in data.keys() for arg in args]):
         return jsonify({'message': f'Missing some of the arguments:{args}'}), 400
 
-    driver = Driver()
+    driver = UserDriver()
     try:
         user = driver.register(data['username'], data['password'], data['email'])
     except AlreadyExists as e:
@@ -47,7 +47,7 @@ def create_user():
 @user_api.route("/<string:username>/set_photo", methods=['POST'])
 def set_photo(username: str):
     try:
-        driver = Driver()
+        driver = UserDriver()
         user = driver.get_by_username(username)
         file = request.files['photo']
         user = driver.set_user_photo(user, file)
