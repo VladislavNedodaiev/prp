@@ -1,6 +1,7 @@
 package com.tnhosh.soundhub;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.internal.BottomNavigationMenu;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -8,22 +9,33 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.tnhosh.soundhub.Fragments.HomeFragment;
 import com.tnhosh.soundhub.Fragments.LibraryFragment;
+import com.tnhosh.soundhub.Fragments.MiniPlayerFragment;
+import com.tnhosh.soundhub.Fragments.PlayerFragment;
 import com.tnhosh.soundhub.Fragments.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+
+    Fragment currentFragment;
+    Fragment previousFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadFragment(new HomeFragment());
+        loadFragment(new HomeFragment(), R.id.fragment_container);
+        if(isMiniPlayerActive()) {
+            loadFragment(new MiniPlayerFragment(), R.id.player_mini_container);
+        } else {
+            hideMiniPlayer();
+        }
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(this);
@@ -45,18 +57,45 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
         }
 
-        return loadFragment(fragment);
+        if (currentFragment.getClass() == PlayerFragment.class) {
+            showMiniPlayer();
+        }
+        return loadFragment(fragment, R.id.fragment_container);
     }
 
-    private boolean loadFragment(Fragment fragment) {
+    public void onMiniPlayerClick(View view) {
+        previousFragment = currentFragment;
+        loadFragment(new PlayerFragment(), R.id.fragment_container);
+        hideMiniPlayer();
+    }
+
+    public void onMiniPlayerHide(View view) {
+
+    }
+
+    private boolean loadFragment(Fragment fragment, int containter) {
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
+                    .replace(containter, fragment)
                     .commit();
+            currentFragment = fragment;
             return true;
         }
         return false;
     }
 
+    private boolean isMiniPlayerActive() {
+        return true;
+    }
+
+    private void hideMiniPlayer() {
+        View mpFrag = findViewById(R.id.player_mini_container);
+        mpFrag.setVisibility(View.GONE);
+    }
+
+    private void showMiniPlayer() {
+        View mpFrag = findViewById(R.id.player_mini_container);
+        mpFrag.setVisibility(View.VISIBLE);
+    }
 }
