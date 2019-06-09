@@ -39,7 +39,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
         // TODO: loading author name from api by track.getUserId();
         holder.trackAuthor.setText("XXXTentacion");
         //TODO: Image loading from api by track.getImageUrl();
-        holder.trackImage.setImageDrawable(context.getDrawable(R.drawable.headphones_logo));
+        holder.trackImage.setImageDrawable(context.getDrawable(R.drawable.xxxtentacion_avatar));
     }
 
     @Override

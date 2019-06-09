@@ -1,7 +1,5 @@
 package com.tnhosh.soundhub.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.tnhosh.soundhub.Adapters.LibraryMenuAdapter;
+import com.tnhosh.soundhub.Adapters.MenuAdapter;
 import com.tnhosh.soundhub.R;
 
 import java.util.ArrayList;
@@ -50,7 +48,7 @@ public class LibraryFragment extends Fragment {
         setInitialData();
         RecyclerView rw = getView().findViewById(R.id.library_menu_list);
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
-        LibraryMenuAdapter adapter = new LibraryMenuAdapter( getActivity(), menuItems);
+        MenuAdapter adapter = new MenuAdapter( getActivity(), menuItems);
         rw.setAdapter(adapter);
     }
 

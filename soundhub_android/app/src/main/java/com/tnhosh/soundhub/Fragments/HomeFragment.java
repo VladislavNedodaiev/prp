@@ -1,7 +1,5 @@
 package com.tnhosh.soundhub.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,14 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.tnhosh.soundhub.Adapters.LibraryMenuAdapter;
 import com.tnhosh.soundhub.Adapters.TrackListAdapter;
 import com.tnhosh.soundhub.Models.Playlist;
 import com.tnhosh.soundhub.Models.Track;
 import com.tnhosh.soundhub.R;
-import com.tnhosh.soundhub.Services.Api.Playlists.PlaylistsApi;
 import com.tnhosh.soundhub.Services.Api.Playlists.PlaylistsApiImpl;
-import com.tnhosh.soundhub.Services.Api.Tracks.TracksApi;
 import com.tnhosh.soundhub.Services.Api.Tracks.TracksApiImpl;
 
 import java.util.ArrayList;
