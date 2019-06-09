@@ -7,4 +7,4 @@ SoundHub is a brand new platform for little known music performers and for liste
 2) VladislavNedodaiev
 3) Onsha
 4) Anastasiia Khrystova
-5)
+5) Illia Trofunenko
