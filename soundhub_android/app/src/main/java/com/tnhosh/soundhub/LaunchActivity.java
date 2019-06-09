@@ -26,6 +26,6 @@ public class LaunchActivity extends AppCompatActivity {
 
     //dummy method
     private boolean isAuthorized() {
-        return true;
+        return false;
     }
 }
