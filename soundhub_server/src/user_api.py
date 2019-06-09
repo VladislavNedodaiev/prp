@@ -32,24 +32,19 @@ def update_user(username: str):
     try:
         driver = UserDriver()
         user = driver.get_by_username(username)
-        responce_body = _user_data_to_dict(driver.update_user(user, data))
-        return jsonify(responce_body), 200
+        response_body = _user_data_to_dict(driver.update_user(user, data))
+        return jsonify(response_body), 200
     except (UserDoesNotExists, MissingArgument) as e:
         return jsonify({'message': str(e)}), 404
 
 
 @user_api.route("/", methods=['POST'])
 def create_user():
-    args = ['username', 'password', 'email']
     data = json.loads(request.data)
-
-    if not all([arg in data.keys() for arg in args]):
-        return jsonify({'message': f'Missing some of the arguments:{args}'}), 400
-
     driver = UserDriver()
     try:
-        user = driver.register(data['username'], data['password'], data['email'])
-    except AlreadyExists as e:
+        user = driver.register(data)
+    except (AlreadyExists, MissingArgument)as e:
         return jsonify({'message': str(e)}), 400
 
     response = _user_data_to_dict(user)
@@ -83,6 +78,7 @@ def set_photo(username: str):
 
 
 def _user_data_to_dict(user: User) -> dict:
+    playlists = [playlist.title for playlist in user.playlists]
     user_data = {
         'username': user.username,
         'email': user.email,
@@ -92,6 +88,7 @@ def _user_data_to_dict(user: User) -> dict:
         'is_premium': user.is_premium,
         'premium_exp_date': user.premium_exp_date,
         'photo_path': user.photo_path,
-        'bio': user.bio
+        'bio': user.bio,
+        'playlists': playlists
     }
     return user_data

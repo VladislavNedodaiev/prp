@@ -30,14 +30,25 @@ class Track(BaseModel):
     duration = SmallIntegerField(null=True)  # in seconds
     file_path = CharField()
 
+    class Meta:
+        database = db
+        indexes = (
+            (('band', 'title'), True),
+        )
 
-class Playlist(BaseModel):
+class Playlist(Model):
     author = ForeignKeyField(User, backref="playlists")
-    title = CharField(unique=True)
+    title = CharField()
     date_of_creation = DateField(default=datetime.date(datetime.now()))
     last_update = DateField(null=True)
     description = TextField(null=True)
     photo_path = CharField(null=True)
+
+    class Meta:
+        database = db
+        indexes = (
+            (('author', 'title'), True),
+        )
 
 
 class PlaylistTracks(BaseModel):

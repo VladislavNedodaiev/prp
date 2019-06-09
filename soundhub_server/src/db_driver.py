@@ -10,9 +10,14 @@ class UserDriver:
     UPLOAD_PHOTO_FOLDER = '../Media/Photo/'
     PHOTO_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
-    def register(self, username, password, email):
-        password_hash = self._hash_password(password)
-        user = User(username=username, password_hash=password_hash, email=email)
+    def register(self, data):
+        args = ('username', 'password', 'email')
+
+        if not all([arg in data.keys() for arg in args]):
+            raise MissingArgument(args)
+
+        password_hash = self._hash_password(data['password'])
+        user = User(username=data['username'], password_hash=password_hash, email=data['email'])
 
         try:
             user.save()
@@ -108,15 +113,60 @@ class TrackDriver:
 
 class PlaylistDriver:
 
-    def create(self, author: User, title, description=None):
-        playlist = Playlist(author=author, title=title, description=description)
+    def create(self, data):
+        args = ('username', 'title')
+        user_driver = UserDriver()
+
+        if not all([arg in data.keys() for arg in args]):
+            raise MissingArgument(args)
+        try:
+            author = user_driver.get_by_username(username=data['username'])
+            playlist = Playlist(author=author, title=data['title'])
+            if 'description' in data.keys():
+                playlist.description = data['description']
+
+            playlist.save()
+            return playlist
+        except UserDoesNotExists:
+            raise
+        except IntegrityError:
+            raise AlreadyExists()
+
+    def update(self, username, title, data):
+        args = ('desctiption', 'title')
+
+        if not any([arg in data.keys() for arg in args]):
+            raise MissingArgument(args)
+
+        try:
+            playlist = self.get(username, title)
+        except (UserDoesNotExists, PlaylistDoesNotExists):
+            raise
+
+        for key, value in data.items():
+            if key in args:
+                setattr(playlist, key, value)
+
         playlist.save()
+        return playlist
 
-    def update(self, playlist: Playlist):
-        pass
+    def get(self, author_username: str, title: str):
+        user_driver = UserDriver()
+        try:
+            author = user_driver.get_by_username(username=author_username)
+            playlist = Playlist.get(Playlist.author == author, Playlist.title == title)
+            return playlist
+        except UserDoesNotExists:
+            raise
+        except DoesNotExist:
+            raise PlaylistDoesNotExists()
 
-    def get(self, playlist_title: str):
-        pass
+    def delete(self, playlist: Playlist):
+        playlist.delete_instance()
 
-    def delete(self, playlist_title: str):
-        pass
+    def delete(self, username, title):
+        try:
+            playlist = self.get(username, title)
+            playlist.delete_instance()
+        except (UserDoesNotExists, PlaylistDoesNotExists):
+            raise
