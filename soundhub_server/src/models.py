@@ -24,6 +24,7 @@ class User(BaseModel):
 
 class Track(BaseModel):
     author = ForeignKeyField(User, backref="songs")
+    band = CharField()
     title = CharField()
     date_of_pub = DateField(default=datetime.date(datetime.now()))
     duration = SmallIntegerField(null=True)  # in seconds
@@ -32,7 +33,7 @@ class Track(BaseModel):
 
 class Playlist(BaseModel):
     author = ForeignKeyField(User, backref="playlists")
-    title = CharField()
+    title = CharField(unique=True)
     date_of_creation = DateField(default=datetime.date(datetime.now()))
     last_update = DateField(null=True)
     description = TextField(null=True)

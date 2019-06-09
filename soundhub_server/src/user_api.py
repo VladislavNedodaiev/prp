@@ -26,6 +26,18 @@ def get_user(username: str):
     return jsonify(response), 200
 
 
+@user_api.route("/<string:username>/update", methods=['POST'])
+def update_user(username: str):
+    data = json.loads(request.data)
+    try:
+        driver = UserDriver()
+        user = driver.get_by_username(username)
+        responce_body = _user_data_to_dict(driver.update_user(user, data))
+        return jsonify(responce_body), 200
+    except (UserDoesNotExists, MissingArgument) as e:
+        return jsonify({'message': str(e)}), 404
+
+
 @user_api.route("/", methods=['POST'])
 def create_user():
     args = ['username', 'password', 'email']
@@ -42,6 +54,17 @@ def create_user():
 
     response = _user_data_to_dict(user)
     return jsonify(response), 200
+
+
+@user_api.route("/<string:username>", methods=['DELETE'])
+def delete_user(username: str):
+    driver = UserDriver()
+    try:
+        user = driver.get_by_username(username)
+        driver.delete_user(user)
+        return '', 200
+    except UserDoesNotExists:
+        return '', 404
 
 
 @user_api.route("/<string:username>/set_photo", methods=['POST'])
@@ -68,6 +91,7 @@ def _user_data_to_dict(user: User) -> dict:
         'balance': user.balance,
         'is_premium': user.is_premium,
         'premium_exp_date': user.premium_exp_date,
-        'photo_path': user.photo_path
+        'photo_path': user.photo_path,
+        'bio': user.bio
     }
     return user_data

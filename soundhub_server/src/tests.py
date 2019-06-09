@@ -1,4 +1,6 @@
+import sys
 import unittest
+
 from src.db_driver import UserDriver
 from src.models import *
 from src.errors import *
@@ -66,6 +68,34 @@ class TestUser(BaseTestCase):
             driver.get_by_username('not_existing_username')
 
 
+class TestTrack(BaseTestCase):
+    def test_create(self):
+        author = User(
+            username='user1',
+            password_hash='12345678',
+            email='user1@gmail.com'
+        )
+        author.save()
+        description = """
+            Some
+            Very
+            Long
+            Multiline
+            Text
+        """
+        playlist = Playlist(
+            author=author,
+            title='sample',
+            description=description
+        )
+        playlist.save()
+
+        self.assertEqual(author, playlist.author)
+        self.assertTrue(playlist in author.playlists)
+        self.assertEqual(len(author.playlists), 1)
+        self.assertEqual(playlist.description, description)
+
+
 if __name__ == '__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestUser)
+    suite = unittest.TestLoader().loadTestsFromModule(sys.modules[__name__])
     unittest.TextTestRunner(verbosity=2).run(suite)
