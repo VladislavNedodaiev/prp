@@ -118,3 +118,83 @@
    ```
    status code: 200
    ```
+
+## Playlist api
+### Base url - `/api/v1/playlists`
+
+1. Get Playlist - `/<string:username>/<string:title>`
+    Method : `GET`
+    
+    Ex.: /onsha/mytracks
+    
+    Output:
+    ```
+    {
+        'author': "onsha",
+        'title': "mytracks",
+        'date_of_creation': "Sat, 08 Jun 2019 00:00:00 GMT",
+        'last_update': "Sat, 08 Jun 2019 00:01:00 GMT",
+        'description': "Description",
+    }
+    ```
+
+2. Create Playlist `/`
+    Method : `POST`
+
+    Input:
+    ```
+    {
+        'author': "onsha",
+        'title': "mytracks",
+        'date_of_creation': "Sat, 08 Jun 2019 00:00:00 GMT",
+        'last_update': "Sat, 08 Jun 2019 00:01:00 GMT",
+        'description': "Description",
+    }
+    ```
+    Output:
+    ```
+    {
+        'author': "onsha",
+        'title': "mytracks",
+        'date_of_creation': "Sat, 08 Jun 2019 00:00:00 GMT",
+        'last_update': "Sat, 08 Jun 2019 00:01:00 GMT",
+        'description': "Description",
+    }
+    ```
+
+
+3. Update Playlist `/<string:username>/<string:title>`
+   Method: `POST`
+   Ex.: /onsha/mytracks
+  
+   Change "description" and "title field" by this method.
+ 
+   Input: 
+   ```
+   {
+     'description': "Description updated",
+     'title': "mytracks updated",
+   }
+   ```
+ 
+   Output:
+     ```
+     {
+         'author': "onsha",
+         'title': "mytracks updated",
+         'date_of_creation': "Sat, 08 Jun 2019 00:00:00 GMT",
+         'last_update': "Sat, 08 Jun 2019 00:01:00 GMT",
+         'description': "Description updated",
+     }
+     ```
+
+3. Delete Playlist `/<string:username>/<string:title>`
+   Method: `DELETE`
+   Ex.: /onsha/mytracks
+  
+   Change "description" and "title field" by this method.
+ 
+   Output:
+     ```
+     ""
+     ```

@@ -3,8 +3,8 @@ SoundHub is a brand new platform for little known music performers and for liste
 # Описание
 -
 # Разаботчики
-1) Vled (допишите себя сами !)
-2) VladislavNedodaiev
-3) Onsha
+1) Vlad Shulha
+2) Vladislav Nedodaiev
+3) Bogdan Onsha
 4) Anastasiia Khrystova
 5) Illia Trofunenko
