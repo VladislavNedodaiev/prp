@@ -57,31 +57,6 @@ def delete_playlist(username: str, title: str):
         return '', 404
 
 
-@playlist_api.route("/<string:playlist_title>/like", methods=['POST'])
-def like_playlist(playlist_title: str):
-    pass
-
-
-@playlist_api.route("/<string:playlist_title>/unlike", methods=['POST'])
-def unlike_playlist(playlist_title: str):
-    pass
-
-
-@playlist_api.route("/<string:playlist_title>/<string:band>/<string:song_title>", methods=['GET'])
-def get_track(playlist_title: str, band: str, song_title: str):
-    pass
-
-
-@playlist_api.route("/<string:playlist_title>/<string:band>/<string:song_title>/like", methods=['POST'])
-def like_track(playlist_title: str, band: str, song_title: str):
-    pass
-
-
-@playlist_api.route("/<string:playlist_title>/<string:band>/<string:song_title>/unlike", methods=['POST'])
-def unlike_track(playlist_title: str, band: str, song_title: str):
-    pass
-
-
 def _playlist_data_to_dict(playlist: Playlist):
     playlist_data = {
         'author': playlist.author.username,
