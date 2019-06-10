@@ -50,6 +50,7 @@
     }
     ```
 3.  Update user data - `/<string:username>/update`
+    
     Method: `POST`
     
     Ex.: /onsha/update
@@ -123,6 +124,7 @@
 ### Base url - `/api/v1/playlists`
 
 1. Get Playlist - `/<string:username>/<string:title>`
+    
     Method : `GET`
     
     Ex.: /onsha/mytracks
@@ -139,6 +141,7 @@
     ```
 
 2. Create Playlist `/`
+    
     Method : `POST`
 
     Input:
@@ -164,7 +167,9 @@
 
 
 3. Update Playlist `/<string:username>/<string:title>`
+   
    Method: `POST`
+   
    Ex.: /onsha/mytracks
   
    Change "description" and "title field" by this method.
@@ -188,8 +193,10 @@
      }
      ```
 
-3. Delete Playlist `/<string:username>/<string:title>`
+4. Delete Playlist `/<string:username>/<string:title>`
+   
    Method: `DELETE`
+   
    Ex.: /onsha/mytracks
   
    Change "description" and "title field" by this method.
