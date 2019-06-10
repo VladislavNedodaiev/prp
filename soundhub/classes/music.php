@@ -1,49 +1,55 @@
 <?php
 
-class account {
+class music {
 	
-	var $user_id;
-	var $login;
-	var $password;
-	var $photo;
-	var $description;
-	var $phone;
-	var $register_date;
-	var $email;
-	var $money;
-	var $premium;
-	var $premium_date;
-	var $premium_duration;
+	var $music_id;
+	var $track_id;
+	var $playlist_id;
+	var $post_date;
 	
 	// set from query result
 	function set_from_qresult($res) {
 		
-		$this->user_id = $res['user_id'];
-		$this->login = $res['login'];
-		$this->password = $res['password'];
-		$this->photo = $res['photo'];
-		$this->description = $res['description'];
-		$this->phone = $res['phone'];
-		$this->register_date = $res['register_date'];
-		$this->email = $res['email'];
-		$this->money = $res['money'];
-		$this->premium = $res['premium'];
-		$this->premium_date = $res['premium_date'];
-		$this->premium_duration = $res['premium_duration'];
+		$this->music_id = $res['music_id'];
+		$this->track_id = $res['track_id'];
+		$this->playlist_id = $res['playlist_id'];
+		$this->post_date = $res['post_date'];
 		
 	}
 	
-	function login ($login_email, $password) {
+	function getById ($msc_id) {
+		
+		$m = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $m;
+		
+		if ($result = $mysqli->query("SELECT `music`.* FROM `music` WHERE `music`.`music_id`='".$msc_id."';")) {
+			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+				
+				$m = new music;
+				$m->set_from_qresult($res);
+				return $m;			
+				
+			}
+		}
+		
+		return $m;
+		
+	}
+	
+	function loadById ($msc_id) {
 		
 		$mysqli = (include "../scripts/connectdb.php");
 		
 		if ($mysqli->connect_errno)
 			return mysqli_connect_error();
 		
-		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE (`user`.`login`='".$login_email."' OR `user`.`email`='".$login_email."') AND `user`.`password`='".password_hash($password, PASSWORD_BCRYPT)."';")) {
+		if ($result = $mysqli->query("SELECT `music`.* FROM `music` WHERE `music`.`music_id`='".$msc_id."';")) {
 			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 				$this->set_from_qresult($res);
-				return true;
+				return true;				
 			}
 		}
 		
@@ -51,74 +57,104 @@ class account {
 		
 	}
 	
-	function register ($login, $email, $password) {
+	function getByTPId ($trck_id, $pllst_id) {
+		
+		$m = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $m;
+		
+		if ($result = $mysqli->query("SELECT `music`.* FROM `music` WHERE `music`.`track_id`='".$trck_id."' AND `music`.`pllst_id`='".$pllst_id."';")) {
+			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+				
+				$m = new music;
+				$m->set_from_qresult($res);
+				return $m;
+				
+			}
+		}
+		
+		return $m;
+		
+	}
+	
+	function loadByTPId ($trck_id, $pllst_id) {
 		
 		$mysqli = (include "../scripts/connectdb.php");
 		
 		if ($mysqli->connect_errno)
 			return mysqli_connect_error();
 		
-		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE `user`.`login`='".$login."' OR `user`.`email`='".$email."';")) {
+		if ($result = $mysqli->query("SELECT `music`.* FROM `music` WHERE `music`.`track_id`='".$trck_id."' AND `music`.`pllst_id`='".$pllst_id."';")) {
 			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-				if ($res['login']==$login)
-					return $login;
-				else
-					return $email;
+				
+				$this->set_from_qresult($res);
+				return true;
+				
 			}
 		}
 		
-		if ($mysqli->query("INSERT INTO `account`(`login`, `password`, `email`)".
+		return false;
+		
+	}
+	
+	function insert () {
+		
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return mysqli_connect_error();
+		
+		if ($this->getByTPId($this->track_id, $this->playlist_id) != NULL)
+			return false;
+		
+		if ($mysqli->query("INSERT INTO `music`(`track_id`, `playlist_id`) ".
 						   "VALUES (".
-						   "'".$login."', ".
-						   "'".$email."', ".
-						   "'".password_hash($password, PASSWORD_BCRYPT)."');")) 
-								return true;
+						   "'".$this->track_id."', ".
+						   "'".$this->playlist_id."');"))  {
 		
+			$this->loadByTPId($this->track_id, $this->playlist_id);
 		
-		
-		return false;
-		
-	}
-	
-	// reloads the account from database
-	function reload_db() {
-
-		$mysqli = (include "../scripts/connectdb.php");
-		
-		if ($mysqli->connect_errno)
-			return mysqli_connect_error();
-		
-		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE `user`.`login`='".$this->user_id."';")) {
-			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-				$this->set_from_qresult($res);
-				return true;
-			}
-		}
-		
-		return false;
-	
-	}
-	
-	// updates the database 
-	function update_db() {
-
-		$mysqli = (include "../scripts/connectdb.php");
-		
-		if ($mysqli->connect_errno)
-			return mysqli_connect_error();
-		
-		if ($mysqli->query("UPDATE `user` SET "
-						   ."`photo`='".$this->photo."', "
-						   ."`description`='".$this->description."', "
-						   ."`phone`='".$this->phone."', "
-						   ."`money`='".$this->money."', "
-						   ."`premium`='".$this->premium."', "
-						   ."`premium_date`=STR_TO_DATE('".$this->premium_date."', '%Y-%m-%d %H:%i:%s'), "
-						   ."`premium_duration`='".$this->premium_duration."' "
-						   ."WHERE `user_id`=".$this->user_id.";"))
 			return true;
 		
+		}
+
 		return false;
+		
+	}
+	
+	function remove () {
+		
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return mysqli_connect_error();
+		
+		if ($mysqli->query("DELETE FROM `music` WHERE `music`.`music_id`='".$this->music_id."';"))  {
+		
+			return true;
+		
+		}
+
+		return false;
+		
+	}
+	
+	function getCountPlaylistTracks() {
+		
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return 0;
+		
+		if ($result = $mysqli->query("SELECT COUNT(`music`.`music_id`) AS genres FROM `music`, `playlist` WHERE `music`.`playlist_id`=`playlist`.`playlist_id`;")) {
+			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+				return $res['genres'];
+			}
+		}
+		
+		return 0;
 		
 	}
 	

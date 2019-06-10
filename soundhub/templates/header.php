@@ -59,22 +59,22 @@ if (!isset($_SESSION))
 			
 			<?php } else { ?>
 			
-			<a id="soundhubbutton" class="menubutton col-2 justify-content-center d-flex align-items-center black" style="height: 100%">
+			<a id="soundhubbutton" value="templates/home.php" class="menubutton col-2 justify-content-center d-flex align-items-center black" style="height: 100%">
 				<h1 class="orange-text my-0">SOUNDHUB</h1>
 			</a>
 			
-			<a id="homebutton" class="menubutton col-1 justify-content-center d-flex align-items-center <?php if (strtok($_SERVER['REQUEST_URI'], '?')=='/soundhub/index.php') echo ' orange darken-1'; ?>" style="height: 100%">
+			<a id="homebutton" value="templates/home.php" class="menubutton col-1 justify-content-center d-flex align-items-center <?php if (strtok($_SERVER['REQUEST_URI'], '?')=='/soundhub/index.php') echo ' orange darken-1'; ?>" style="height: 100%">
 				<h5 class="text-dark my-0">HOME</h4>
 			</a>
 			
-			<a id="librarybutton" class="menubutton col-1 justify-content-center d-flex align-items-center <?php if (strtok($_SERVER['REQUEST_URI'], '?')=='/soundhub/library.php') echo ' orange darken-1'; ?>" style="height: 100%">
+			<a id="librarybutton" value="templates/library.php" class="menubutton col-1 justify-content-center d-flex align-items-center <?php if (strtok($_SERVER['REQUEST_URI'], '?')=='/soundhub/library.php') echo ' orange darken-1'; ?>" style="height: 100%">
 				<h5 class="text-dark my-0">LIBRARY</h4>
 			</a>
 			
 			<div class="col">
 				<div class="row" style="width:100%;">
 					<div class="container justify-content-center d-flex align-items-center text-muted">
-						<a id="currentauthor" value=""></a>
+						<a id="currentauthor" value="" href="#"></a>
 						<span id="currenttrackname">Select music</a>
 					</div>
 					<div class="container" style="width:100%;">
@@ -85,78 +85,19 @@ if (!isset($_SESSION))
 				</div>
 			</div>
 			
-			<a id="profilebutton"  class="menubutton col-1 justify-content-center d-flex align-items-center <?php if (strtok($_SERVER['REQUEST_URI'], '?')=='/soundhub/profile.php') echo ' orange darken-1'; ?>" style="height: 100%">
+			<a id="profilebutton" value="templates/profile.php" class="menubutton col-1 justify-content-center d-flex align-items-center <?php if (strtok($_SERVER['REQUEST_URI'], '?')=='/soundhub/profile.php') echo ' orange darken-1'; ?>" style="height: 100%">
 				<h5 class="text-dark my-0">ACCOUNT</h4>
 			</a>
 			
-			<a id="uploadbutton"  class="menubutton col-1 justify-content-center d-flex align-items-center <?php if (strtok($_SERVER['REQUEST_URI'], '?')=='/soundhub/upload.php') echo ' orange darken-1'; ?>" style="height: 100%">
+			<a id="uploadbutton" value="templates/upload.php" class="menubutton col-1 justify-content-center d-flex align-items-center <?php if (strtok($_SERVER['REQUEST_URI'], '?')=='/soundhub/upload.php') echo ' orange darken-1'; ?>" style="height: 100%">
 				<h5 class="text-dark my-0">UPLOAD</h4>
 			</a>
 			
-			<script>
-	
-				$( "#soundhubbutton" ).click(function() {
-					$('.menubutton').removeClass('orange darken-1');
-					$('#homebutton').addClass('orange darken-1');
-					
-					let query="templates/home.php";
-					sendxmlhttp(query);
-				});
-				
-				$( "#homebutton" ).click(function() {
-					$('.menubutton').removeClass('orange darken-1');
-					$(this).addClass('orange darken-1');
-					
-					query="templates/home.php";
-					sendxmlhttp(query);
-				});
-				
-				$( "#librarybutton" ).click(function() {
-					$('.menubutton').removeClass('orange darken-1');
-					$(this).addClass('orange darken-1');
-					
-					query="templates/library.php";
-					sendxmlhttp(query);
-				});
-				
-				$( "#profilebutton" ).click(function() {
-					$('.menubutton').removeClass('orange darken-1');
-					$(this).addClass('orange darken-1');
-					
-					query="templates/profile.php";
-					sendxmlhttp(query);
-				});
-				
-				$( "#uploadbutton" ).click(function() {
-					$('.menubutton').removeClass('orange darken-1');
-					$(this).addClass('orange darken-1');
-					
-					query="templates/upload.php";
-					sendxmlhttp(query);
-				});
-				
-				$( "#currentauthor" ).click(function() {
-					$('.menubutton').removeClass('orange darken-1');
-					$('#profilebutton').addClass('orange darken-1');
-					
-					sendxmlhttp($('currentauthor').value);
-				});
-				
-				function sendxmlhttp(query) {
-
-					var xmlhttp = new XMLHttpRequest();
-					xmlhttp.onreadystatechange = function() {
-						if (this.readyState == 4 && this.status == 200) {
-							document.getElementById('contentContainer').innerHTML = this.responseText;
-						}
-					};
-					xmlhttp.open("POST", query, false);
-					xmlhttp.send();
-					
-				}
-				
-				
-			</script>
+			<a href="scripts/logout.php" class="col-1 justify-content-center d-flex align-items-center" style="height: 100%">
+				<h5 class="text-dark my-0">LOGOUT</h4>
+			</a>
+			
+			<?php include "scripts/js.php"; ?>	
 			
 			<?php } ?>
 			
@@ -165,6 +106,5 @@ if (!isset($_SESSION))
 		<div class = "card bg-white">
 		<div class = "content mx-auto my-5" style="background-color: #FFF; width: 75%">
 		
-		<?php include "templates/alert.php"; ?>
-		
 		<div id = "contentContainer" class = "container">
+		<?php include "templates/alert.php"; ?>

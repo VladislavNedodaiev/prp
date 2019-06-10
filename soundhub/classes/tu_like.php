@@ -1,49 +1,77 @@
 <?php
 
-class account {
+class tu_like {
 	
+	var $tu_like_id;
 	var $user_id;
-	var $login;
-	var $password;
-	var $photo;
-	var $description;
-	var $phone;
-	var $register_date;
-	var $email;
-	var $money;
-	var $premium;
-	var $premium_date;
-	var $premium_duration;
+	var $track_id;
 	
 	// set from query result
 	function set_from_qresult($res) {
 		
+		$this->tu_like_id = $res['tu_like_id'];
 		$this->user_id = $res['user_id'];
-		$this->login = $res['login'];
-		$this->password = $res['password'];
-		$this->photo = $res['photo'];
-		$this->description = $res['description'];
-		$this->phone = $res['phone'];
-		$this->register_date = $res['register_date'];
-		$this->email = $res['email'];
-		$this->money = $res['money'];
-		$this->premium = $res['premium'];
-		$this->premium_date = $res['premium_date'];
-		$this->premium_duration = $res['premium_duration'];
+		$this->track_id = $res['track_id'];
 		
 	}
 	
-	function login ($login_email, $password) {
+	function getById ($id) {
+		
+		$tulike = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $tulike;
+		
+		if ($result = $mysqli->query("SELECT `tu_like`.* FROM `tu_like` WHERE `tu_like`.`tu_like_id`='".$id."';")) {
+			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+
+				$tulike = new tu_like;
+				$tulike ->set_from_qresult($res);
+				return $tulike;
+				
+			}
+		}
+		
+		return $tulike;
+		
+	}
+	
+	function getByUT($uid, $tid) {
+		
+		$tulike = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $tulike;
+		
+		if ($result = $mysqli->query("SELECT `tu_like`.* FROM `tu_like` WHERE `tu_like`.`user_id`='".$uid."' AND `tu_like`.`track_id`='".$tid."';")) {
+			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+
+				$tulike = new tu_like;
+				$tulike ->set_from_qresult($res);
+				return $tulike;
+				
+			}
+		}
+		
+		return $tulike;
+		
+	}
+	
+	function loadById ($id) {
 		
 		$mysqli = (include "../scripts/connectdb.php");
 		
 		if ($mysqli->connect_errno)
 			return mysqli_connect_error();
 		
-		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE (`user`.`login`='".$login_email."' OR `user`.`email`='".$login_email."') AND `user`.`password`='".password_hash($password, PASSWORD_BCRYPT)."';")) {
+		if ($result = $mysqli->query("SELECT `tu_like`.* FROM `tu_like` WHERE `tu_like`.`tu_like_id`='".$id."';")) {
 			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+
 				$this->set_from_qresult($res);
 				return true;
+				
 			}
 		}
 		
@@ -51,74 +79,79 @@ class account {
 		
 	}
 	
-	function register ($login, $email, $password) {
+	function loadByFromTo ($uid, $tid) {
 		
 		$mysqli = (include "../scripts/connectdb.php");
 		
 		if ($mysqli->connect_errno)
 			return mysqli_connect_error();
 		
-		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE `user`.`login`='".$login."' OR `user`.`email`='".$email."';")) {
+		if ($result = $mysqli->query("SELECT `tu_like`.* FROM `tu_like` WHERE `tu_like`.`user_id`='".$uid."' AND `tu_like`.`track_id`='".$tid."';")) {
 			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-				if ($res['login']==$login)
-					return $login;
-				else
-					return $email;
+
+				$this->set_from_qresult($res);
+				return true;
+				
 			}
 		}
 		
-		if ($mysqli->query("INSERT INTO `account`(`login`, `password`, `email`)".
+		return false;
+		
+	}
+	
+	function insert () {
+		
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return mysqli_connect_error();
+		
+		if ($this->getByUT($this->$user_id, $this->$track_id))
+			return false;
+		
+		if ($mysqli->query("INSERT INTO `tu_like`(`user_id`, `track_id`) ".
 						   "VALUES (".
-						   "'".$login."', ".
-						   "'".$email."', ".
-						   "'".password_hash($password, PASSWORD_BCRYPT)."');")) 
-								return true;
+						   "'".$this->user_id."', ".
+						   "'".$this->track_id."');"))  {
 		
+			return true;
 		
-		
-		return false;
-		
-	}
-	
-	// reloads the account from database
-	function reload_db() {
-
-		$mysqli = (include "../scripts/connectdb.php");
-		
-		if ($mysqli->connect_errno)
-			return mysqli_connect_error();
-		
-		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE `user`.`login`='".$this->user_id."';")) {
-			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-				$this->set_from_qresult($res);
-				return true;
-			}
 		}
-		
+
 		return false;
-	
+		
 	}
 	
-	// updates the database 
-	function update_db() {
-
+	function remove() {
+		
 		$mysqli = (include "../scripts/connectdb.php");
 		
 		if ($mysqli->connect_errno)
 			return mysqli_connect_error();
 		
-		if ($mysqli->query("UPDATE `user` SET "
-						   ."`photo`='".$this->photo."', "
-						   ."`description`='".$this->description."', "
-						   ."`phone`='".$this->phone."', "
-						   ."`money`='".$this->money."', "
-						   ."`premium`='".$this->premium."', "
-						   ."`premium_date`=STR_TO_DATE('".$this->premium_date."', '%Y-%m-%d %H:%i:%s'), "
-						   ."`premium_duration`='".$this->premium_duration."' "
-						   ."WHERE `user_id`=".$this->user_id.";"))
+		if ($mysqli->query("DELETE FROM `tu_like` WHERE `tu_like`.`tu_like_id`='".$this->tu_like_id."';"))
 			return true;
 		
 		return false;
+		
+	}
+	
+	function getCountByTrackId($id) {
+		
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return 0;
+		
+		if ($result = $mysqli->query("SELECT `tu_like`.* FROM `tu_like` WHERE `tu_like`.`track_id`='".$id."';")) {
+			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+				
+				return $res['tu_likes'];
+				
+			}
+		}
+		
+		return 0;
 		
 	}
 	

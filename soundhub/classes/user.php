@@ -76,7 +76,7 @@ class user {
 						   "'".$login."', ".
 						   "'".$email."', ".
 						   "'".password_hash($password, PASSWORD_BCRYPT)."');"))  {
-								
+			
 			return true;
 		
 		}
@@ -88,12 +88,35 @@ class user {
 	// reloads the account from database
 	function getById($id) {
 
+		$usr = NULL;
+		
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $usr;
+		
+		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE `user`.`user_id`='".$id."';")) {
+			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+				
+				$usr = new user;
+				$usr->set_from_qresult($res);
+				return $usr;
+				
+			}
+		}
+		
+		return $usr;
+	
+	}
+	
+	function loadById($id) {
+
 		$mysqli = (include "../scripts/connectdb.php");
 		
 		if ($mysqli->connect_errno)
 			return mysqli_connect_error();
 		
-		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE `user`.`login`='".$id."';")) {
+		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE `user`.`user_id`='".$id."';")) {
 			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 				$this->set_from_qresult($res);
 				return true;

@@ -1,49 +1,77 @@
 <?php
 
-class account {
+class subscription {
 	
-	var $user_id;
-	var $login;
-	var $password;
-	var $photo;
-	var $description;
-	var $phone;
-	var $register_date;
-	var $email;
-	var $money;
-	var $premium;
-	var $premium_date;
-	var $premium_duration;
+	var $subscription_id;
+	var $user_from_id;
+	var $user_to_id;
 	
 	// set from query result
 	function set_from_qresult($res) {
 		
-		$this->user_id = $res['user_id'];
-		$this->login = $res['login'];
-		$this->password = $res['password'];
-		$this->photo = $res['photo'];
-		$this->description = $res['description'];
-		$this->phone = $res['phone'];
-		$this->register_date = $res['register_date'];
-		$this->email = $res['email'];
-		$this->money = $res['money'];
-		$this->premium = $res['premium'];
-		$this->premium_date = $res['premium_date'];
-		$this->premium_duration = $res['premium_duration'];
+		$this->subscription_id = $res['subscription_id'];
+		$this->user_from_id = $res['user_from_id'];
+		$this->user_to_id = $res['user_to_id'];
 		
 	}
 	
-	function login ($login_email, $password) {
+	function getById ($id) {
+		
+		$sscribtion = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $sscribtion;
+		
+		if ($result = $mysqli->query("SELECT `subscription`.* FROM `subscription` WHERE `subscription`.`subscription_id`='".$id."';")) {
+			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+
+				$sscribtion = new subscription;
+				$sscribtion ->set_from_qresult($res);
+				return $sscribtion;
+				
+			}
+		}
+		
+		return $sscribtion;
+		
+	}
+	
+	function getByFromTo($idFROM, $idTO) {
+		
+		$sscribtion = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $sscribtion;
+		
+		if ($result = $mysqli->query("SELECT `subscription`.* FROM `subscription` WHERE `subscription`.`user_from_id`='".$idFROM."' AND `subscription`.`user_to_id`='".$idTO."';")) {
+			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+
+				$sscribtion = new subscription;
+				$sscribtion ->set_from_qresult($res);
+				return $sscribtion;
+				
+			}
+		}
+		
+		return $sscribtion;
+		
+	}
+	
+	function loadById ($id) {
 		
 		$mysqli = (include "../scripts/connectdb.php");
 		
 		if ($mysqli->connect_errno)
 			return mysqli_connect_error();
 		
-		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE (`user`.`login`='".$login_email."' OR `user`.`email`='".$login_email."') AND `user`.`password`='".password_hash($password, PASSWORD_BCRYPT)."';")) {
+		if ($result = $mysqli->query("SELECT `subscription`.* FROM `subscription` WHERE `subscription`.`subscription_id`='".$id."';")) {
 			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+
 				$this->set_from_qresult($res);
 				return true;
+				
 			}
 		}
 		
@@ -51,74 +79,106 @@ class account {
 		
 	}
 	
-	function register ($login, $email, $password) {
+	function loadByFromTo ($idFROM, $idTO) {
 		
 		$mysqli = (include "../scripts/connectdb.php");
 		
 		if ($mysqli->connect_errno)
 			return mysqli_connect_error();
 		
-		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE `user`.`login`='".$login."' OR `user`.`email`='".$email."';")) {
+		if ($result = $mysqli->query("SELECT `subscription`.* FROM `subscription` WHERE `subscription`.`user_from_id`='".$idFROM."' AND `subscription`.`user_to_id`='".$idTO."';")) {
 			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-				if ($res['login']==$login)
-					return $login;
-				else
-					return $email;
+
+				$this->set_from_qresult($res);
+				return true;
+				
 			}
 		}
 		
-		if ($mysqli->query("INSERT INTO `account`(`login`, `password`, `email`)".
+		return false;
+		
+	}
+	
+	function insert () {
+		
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return mysqli_connect_error();
+		
+		if ($this->getByFromTo($this->$user_from_id, $this->$user_to_id))
+			return false;
+		
+		if ($mysqli->query("INSERT INTO `subscription`(`user_from_id`, `user_to_id`) ".
 						   "VALUES (".
-						   "'".$login."', ".
-						   "'".$email."', ".
-						   "'".password_hash($password, PASSWORD_BCRYPT)."');")) 
-								return true;
+						   "'".$this->user_from_id."', ".
+						   "'".$this->user_to_id."');"))  {
 		
+			return true;
 		
-		
-		return false;
-		
-	}
-	
-	// reloads the account from database
-	function reload_db() {
-
-		$mysqli = (include "../scripts/connectdb.php");
-		
-		if ($mysqli->connect_errno)
-			return mysqli_connect_error();
-		
-		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE `user`.`login`='".$this->user_id."';")) {
-			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-				$this->set_from_qresult($res);
-				return true;
-			}
 		}
-		
+
 		return false;
-	
+		
 	}
 	
-	// updates the database 
-	function update_db() {
-
+	function remove() {
+		
 		$mysqli = (include "../scripts/connectdb.php");
 		
 		if ($mysqli->connect_errno)
 			return mysqli_connect_error();
 		
-		if ($mysqli->query("UPDATE `user` SET "
-						   ."`photo`='".$this->photo."', "
-						   ."`description`='".$this->description."', "
-						   ."`phone`='".$this->phone."', "
-						   ."`money`='".$this->money."', "
-						   ."`premium`='".$this->premium."', "
-						   ."`premium_date`=STR_TO_DATE('".$this->premium_date."', '%Y-%m-%d %H:%i:%s'), "
-						   ."`premium_duration`='".$this->premium_duration."' "
-						   ."WHERE `user_id`=".$this->user_id.";"))
+		if ($mysqli->query("DELETE FROM `subscription` WHERE `subscription`.`subscription_id`='".$this->subscription_id."'"))
 			return true;
 		
 		return false;
+		
+	}
+	
+	function getByFromId($id) {
+		
+		$sscriptions = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $sscriptions;
+		
+		if ($result = $mysqli->query("SELECT `subscription`.* FROM `subscription` WHERE `subscription`.`user_from_id`='".$id."';")) {
+			while ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+				
+				$s = new subscription;
+				$s->set_from_qresult($res);
+				
+				$sscriptions[$s->subscription_id] = $s;
+				
+			}
+		}
+		
+		return $sscriptions;
+		
+	}
+	
+	function getByToId($id) {
+		
+		$sscriptions = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $sscriptions;
+		
+		if ($result = $mysqli->query("SELECT `subscription`.* FROM `subscription` WHERE `subscription`.`user_to_id`='".$id."';")) {
+			while ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+				
+				$s = new subscription;
+				$s->set_from_qresult($res);
+				
+				$sscriptions[$s->subscription_id] = $s;
+				
+			}
+		}
+		
+		return $sscriptions;
 		
 	}
 	
