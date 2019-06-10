@@ -41,27 +41,50 @@ def get_track(playlist_title: str, band: str, song_title: str):
 
     return jsonify(_track_data_to_dict(track)), 200
 
-@playlist_api.route("/<string:playlist_title>/<string:band>/<string:song_title>/like", methods=['POST'])
-def like_track(playlist_title: str, band: str, song_title: str):
+@playlist_api.route("/<string:band>/<string:song_title>/like", methods=['POST'])
+def like_track(band: str, song_title: str):
     data = json.loads(request.data)
     username = data['username']
     u_driver = UserDriver()
     t_driver = TrackDriver()
+    driver = LikeDriver()
 
     try:
         user = u_driver.get_by_username(username)
-        track = t_driver.get_track(song_title, band)
+        track = t_driver.get_track(band, song_title)
+        like = driver.like(user, track)
+
+        return jsonify(_like_data_to_dict(like))
+        
     except (TrackDoesNotExists) as e:
         return jsonify({'message': str(e)}), 400
-    except Exception as e:
+    except TrackAlreadyLiked as e:
         return jsonify({'message': str(e)}), 400
     except Exception as e:
         return jsonify({'message': str(e)}), 400
 
 
-@playlist_api.route("/<string:playlist_title>/<string:band>/<string:song_title>/unlike", methods=['POST'])
-def unlike_track(playlist_title: str, band: str, song_title: str):
-    pass
+@playlist_api.route("/<string:band>/<string:song_title>/unlike", methods=['POST'])
+def unlike_track(band: str, song_title: str):
+    data = json.loads(request.data)
+    username = data['username']
+    u_driver = UserDriver()
+    t_driver = TrackDriver()
+    driver = LikeDriver()
+
+    try:
+        user = u_driver.get_by_username(username)
+        track = t_driver.get_track(band, song_title)
+        like = driver.unlike(track, user)
+
+        return jsonify(_like_data_to_dict(like))
+        
+    except (TrackDoesNotExists) as e:
+        return jsonify({'message': str(e)}), 400
+    except TrackAlreadyLiked as e:
+        return jsonify({'message': str(e)}), 400
+    except Exception as e:
+        return jsonify({'message': str(e)}), 400
 
 
 def _track_data_to_dict(track: Track):
@@ -74,3 +97,10 @@ def _track_data_to_dict(track: Track):
         'file_path': track.file_path,
     }
     return track_data
+    
+def _like_data_to_dict(like: Like):
+    like_data = {
+        'author': like.track,
+        'user': like.user,
+    }
+    return like_data

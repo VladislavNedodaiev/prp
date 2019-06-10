@@ -204,3 +204,24 @@ class PlaylistDriver:
             playlist.delete_instance()
         except (UserDoesNotExists, PlaylistDoesNotExists):
             raise
+
+
+class TrackLikeDriver:
+    def check_if_liked(track, user):
+        like = Like(Like.track == track, Like.user == user)
+        if not like:
+            return False
+        return True
+
+    def like(track, user):
+        if check_if_liked(track, user):
+            raise TrackAlreadyLiked()
+        like = Like(track=track, user=user)
+        return like
+
+    def unlike(track, user):
+        if not check_if_liked(track, user):
+            raise TrackLikeNotFound()
+        like = Like.get(Like.track==track, Like.user==user)
+        like.delete_instance()
+        return like

@@ -12,6 +12,16 @@ class PlaylistDoesNotExists(Exception):
         Exception.__init__(self, "Playlist with the given username and title does not exists")
 
 
+class TrackAlreadyLiked(Exception):
+    def __init__(selfd):
+        Exception.__init__(self, "Given user have already liked song")
+
+
+class TrackLikeNotFound(Exception):
+    def __init__(selfd):
+        Exception.__init__(self, "User have not yet liked the track")
+
+
 class MissingArgument(Exception):
     def __init__(self, args):
         Exception.__init__(self, f"Missing arguments: {args}")
