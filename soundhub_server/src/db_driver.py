@@ -1,6 +1,7 @@
 from hashlib import sha256
 from uuid import uuid4
 import os
+import eyed3
 
 from src.models import *
 from src.errors import *
@@ -95,16 +96,48 @@ class TrackDriver:
     UPLOAD_TRACK_FOLDER = '../Media/Audio/'
     TRACK_EXTENSIONS = {'.mp3'}
 
-    def upload(self, file, user: User, playlist: Playlist):
+    def _rename_track(self, title, filename, author, band):
+        ext_index = filename.rfind('.')
+        ext = filename[ext_index:]
+        new_filename = f'{title}_{author}_{band}'
+        return new_filename
+
+    def like(self, username: str, band: str, title: str):
+        pass
+
+    def unlike(self, username: str, band: str, title: str):
+        pass
+
+    def get_track(str, band: str, title: str):
+        try:
+            user = Track.get(Track.band == band, Track.title == title)
+        except (PlaylistDoesNotExists, UserDoesNotExists) as e:
+            return jsonify({'message': str(e)}), 400
+        return jsonify(user)
+
+    def upload(self, title, band, author, file, user: User, playlist: Playlist):
         try:
             self._allowed_audio(file.filename)
         except InvalidFile:
             raise
 
+        self._rename_photo(title, file, author, band)
+        filepath = os.path.join(self.UPLOAD_PHOTO_FOLDER, file)
+        file.save(filepath)
+
+        track = Track(author=author, band=band, title=title, \
+            duration = eyed3.load(filepath).info.time_secs, filepath=filepath)
+
         if not playlist.author == user:
             raise PermissionError()
 
-        print('seems like Ok')
+        track.save()
+
+    def add_to_playlist(self, username, playlist, track: Track):
+        pass
+
+    def remove_from_playlist(self, username, playlist, track: Track):
+        pass
 
     def _allowed_audio(self, filename):
         if not ('.' in filename and filename.rsplit('.', 1)[1].lower() in self.TRACK_EXTENSIONS):

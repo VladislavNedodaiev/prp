@@ -36,6 +36,7 @@ class Track(BaseModel):
             (('band', 'title'), True),
         )
 
+
 class Playlist(Model):
     author = ForeignKeyField(User, backref="playlists")
     title = CharField()

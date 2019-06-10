@@ -2,6 +2,10 @@ class UserDoesNotExists(Exception):
     def __init__(self):
         Exception.__init__(self, "User with the given username does not exists")
 
+class TrackDoesNotExists(Exception):
+    def __init__(self):
+        Exception.__init__(self, "Track with the given band and title does not exists")
+
 
 class PlaylistDoesNotExists(Exception):
     def __init__(self):
