@@ -46,7 +46,7 @@ public class MiniPlayerFragment extends Fragment {
         ImageView playBtn = getView().findViewById(R.id.imageView3);
         playBtn.setImageDrawable(getContext().getDrawable(R.drawable.ic_pause));
 
-        MusicPlayerService player = new MusicPlayerService();
+        MusicPlayerService player = new MusicPlayerService(getActivity());
         player.loadTrack(new Track(10, 0, "", new Date(324243242), 180, AUDIO_URL));
     }
 

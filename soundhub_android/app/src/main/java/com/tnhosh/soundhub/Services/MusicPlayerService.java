@@ -1,12 +1,15 @@
 package com.tnhosh.soundhub.Services;
 
 import android.app.Activity;
+import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.media.MediaPlayer;
+import android.net.Uri;
 
 import com.tnhosh.soundhub.Models.Track;
+import com.tnhosh.soundhub.R;
 
 import java.io.IOException;
 
@@ -15,8 +18,10 @@ public class MusicPlayerService {
     public final MediaPlayer player = new MediaPlayer();
     boolean isInited = false;
     int currentTrackId = -10;
+    Context context;
 
-    public MusicPlayerService() {
+    public MusicPlayerService(Context context) {
+        this.context = context;
         initPlayer();
     }
 

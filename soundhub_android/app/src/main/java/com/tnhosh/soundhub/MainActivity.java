@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     Fragment currentFragment;
     Fragment previousFragment;
 
-    MusicPlayerService player = new MusicPlayerService();
+    MusicPlayerService player = new MusicPlayerService(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

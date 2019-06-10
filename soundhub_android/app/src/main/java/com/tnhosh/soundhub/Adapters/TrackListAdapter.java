@@ -8,8 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.tnhosh.soundhub.Models.Track;
+import com.tnhosh.soundhub.Models.User;
 import com.tnhosh.soundhub.R;
+import com.tnhosh.soundhub.Services.Api.Users.UsersApiImpl;
 import com.tnhosh.soundhub.Services.MusicPlayerService;
 
 import java.util.List;
@@ -42,10 +45,14 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
         //holder.trackName.setText(track.getName());
 
         holder.TrackId = track.getId();
-        // TODO: loading author name from api by track.getUserId();
-        holder.trackAuthor.setText("XXXTentacion");
-        //TODO: Image loading from api by track.getImageUrl();
-        holder.trackImage.setImageDrawable(context.getDrawable(R.drawable.xxxtentacion_avatar));
+
+        UsersApiImpl uai = new UsersApiImpl();
+        User user = uai.getUserById(track.getUserId());
+        holder.trackAuthor.setText(user.getLogin());
+
+        holder.trackName.setText(track.getName());
+
+        Picasso.get().load(user.getImageUrl()).into(holder.userImg);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,13 +77,13 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        final ImageView trackImage;
+        ImageView userImg;
         final TextView trackName;
         final TextView trackAuthor;
         public int TrackId = -10;
         ViewHolder(View view){
             super(view);
-            trackImage = view.findViewById(R.id.track_image);
+            userImg = view.findViewById(R.id.track_image);
             trackName = view.findViewById(R.id.track_name);
             trackAuthor = view.findViewById(R.id.author_name);
 
