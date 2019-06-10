@@ -12,9 +12,8 @@ public class TracksApiImpl implements TracksApi {
     public List<Track> getTrackListByPlaylistid(int playListId) {
         List<Track> list = new ArrayList<>();
         Date d = Calendar.getInstance().getTime();
-        list.add(new Track(0, 0, "Moonlight", d, 180));
-        list.add(new Track(0, 1, "Middle child", d, 180));
-        list.add(new Track(0, 0, "SAD", d, 180));
+        list.add(new Track(0, 0, "Middle child", d, 180, "https://muzwave.net/uploads/files/2019-05/1556948728_1-06_-pnb-rock-middle-child-feat_-xxxtentacion.mp3"));
+        list.add(new Track(1, 1, "Ball w/o you", d, 180, "https://muzwave.net/uploads/files/2018-12/1545855835_10_-ball-w-o-you.mp3"));
         return list;
     }
 }

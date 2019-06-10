@@ -1,29 +1,26 @@
 package com.tnhosh.soundhub;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.internal.BottomNavigationMenu;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.TextView;
 
 import com.tnhosh.soundhub.Fragments.HomeFragment;
 import com.tnhosh.soundhub.Fragments.LibraryFragment;
 import com.tnhosh.soundhub.Fragments.MiniPlayerFragment;
 import com.tnhosh.soundhub.Fragments.PlayerFragment;
 import com.tnhosh.soundhub.Fragments.ProfileFragment;
+import com.tnhosh.soundhub.Services.MusicPlayerService;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     Fragment currentFragment;
     Fragment previousFragment;
+
+    MusicPlayerService player = new MusicPlayerService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +86,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         return true;
     }
 
+    public MusicPlayerService getMusicPlayerService() {
+        return player;
+    }
+
     private void hideMiniPlayer() {
         View mpFrag = findViewById(R.id.player_mini_container);
         mpFrag.setVisibility(View.GONE);
@@ -97,5 +98,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void showMiniPlayer() {
         View mpFrag = findViewById(R.id.player_mini_container);
         mpFrag.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        player.releaseMP();
     }
 }

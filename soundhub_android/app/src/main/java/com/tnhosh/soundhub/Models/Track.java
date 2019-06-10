@@ -8,13 +8,15 @@ public class Track {
     private String Name;
     private Date Date;
     private int Length;
+    private String Url;
 
-    public Track(int id, int userId, String name, java.util.Date date, int length) {
+    public Track(int id, int userId, String name, java.util.Date date, int length, String url) {
         Id = id;
         UserId = userId;
         Name = name;
         Date = date;
         Length = length;
+        Url = url;
     }
 
     public int getId() {
@@ -55,5 +57,13 @@ public class Track {
 
     public void setLength(int length) {
         Length = length;
+    }
+
+    public String getUrl() {
+        return Url;
+    }
+
+    public void setUrl(String url) {
+        Url = url;
     }
 }

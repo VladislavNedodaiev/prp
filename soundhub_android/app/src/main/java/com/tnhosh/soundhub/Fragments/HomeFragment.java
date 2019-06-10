@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tnhosh.soundhub.Adapters.TrackListAdapter;
+import com.tnhosh.soundhub.MainActivity;
 import com.tnhosh.soundhub.Models.Playlist;
 import com.tnhosh.soundhub.Models.Track;
 import com.tnhosh.soundhub.R;
 import com.tnhosh.soundhub.Services.Api.Playlists.PlaylistsApiImpl;
 import com.tnhosh.soundhub.Services.Api.Tracks.TracksApiImpl;
+import com.tnhosh.soundhub.Services.MusicPlayerService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,15 +55,19 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        MainActivity ma = (MainActivity) getActivity();
+
+        MusicPlayerService player = ma.getMusicPlayerService();
+
         setInitialData();
         RecyclerView rw = getView().findViewById(R.id.newly_posted_list);
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
-        TrackListAdapter adapter = new TrackListAdapter(getActivity(), tracks);
+        TrackListAdapter adapter = new TrackListAdapter(getActivity(), tracks, player);
         rw.setAdapter(adapter);
 
         RecyclerView rw1 = getView().findViewById(R.id.most_popular_list);
         rw1.setLayoutManager(new LinearLayoutManager(getActivity()));
-        TrackListAdapter adapter1 = new TrackListAdapter(getActivity(), tracks1);
+        TrackListAdapter adapter1 = new TrackListAdapter(getActivity(), tracks1, player);
         rw1.setAdapter(adapter1);
     }
 
