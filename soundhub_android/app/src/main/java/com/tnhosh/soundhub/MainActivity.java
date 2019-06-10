@@ -7,12 +7,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.tnhosh.soundhub.Fragments.HomeFragment;
 import com.tnhosh.soundhub.Fragments.LibraryFragment;
 import com.tnhosh.soundhub.Fragments.MiniPlayerFragment;
 import com.tnhosh.soundhub.Fragments.PlayerFragment;
 import com.tnhosh.soundhub.Fragments.ProfileFragment;
+import com.tnhosh.soundhub.Models.Track;
+import com.tnhosh.soundhub.Models.User;
+import com.tnhosh.soundhub.Services.Api.Users.UsersApi;
+import com.tnhosh.soundhub.Services.Api.Users.UsersApiImpl;
 import com.tnhosh.soundhub.Services.MusicPlayerService;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -27,15 +32,23 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadFragment(new HomeFragment(), R.id.fragment_container);
         if(isMiniPlayerActive()) {
             loadFragment(new MiniPlayerFragment(), R.id.player_mini_container);
         } else {
             hideMiniPlayer();
         }
+        loadFragment(new HomeFragment(), R.id.fragment_container);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(this);
+
+        View miniPlayer = findViewById(R.id.player_mini_container);
+        miniPlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onMiniPlayerClick(v);
+            }
+        });
     }
 
     @Override
@@ -62,13 +75,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     public void onMiniPlayerClick(View view) {
         previousFragment = currentFragment;
-        loadFragment(new PlayerFragment(), R.id.fragment_container);
+        //loadFragment(new PlayerFragment(), R.id.fragment_container);
+        Track currTrack = player.getCurrentTrack();
+        UsersApi ua = new UsersApiImpl();
+        User currUser = ua.getUserById(currTrack.getUserId());
+        updatePlayer(currUser.getImageUrl(), currTrack.getName(), currUser.getLogin(), 120, 300);
         hideMiniPlayer();
+        currentFragment = new PlayerFragment();
     }
 
-    public void onMiniPlayerHide(View view) {
-
+    public void onPlayerHide(View view) {
+        loadFragment(previousFragment, R.id.fragment_container);
+        showMiniPlayer();
     }
+
 
     private boolean loadFragment(Fragment fragment, int containter) {
         if (fragment != null) {
@@ -82,8 +102,36 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         return false;
     }
 
+    public void updateMiniPlayer(String ImageUrl, String TrackName) {
+        MiniPlayerFragment mpFrag = new MiniPlayerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("ImageUrl", ImageUrl);
+        bundle.putString("TrackName", TrackName);
+        mpFrag.setArguments(bundle);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.player_mini_container, mpFrag)
+                .commit();
+        showMiniPlayer();
+    }
+
+    public void updatePlayer(String imageUrl, String trackName, String authorName, int seekPosition, int seekFull) {
+        PlayerFragment pFrag = new PlayerFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("ImageUrl", imageUrl);
+        bundle.putString("TrackName", trackName);
+        bundle.putString("AuthorName", authorName);
+        bundle.putInt("SeekPosition", seekPosition);
+        bundle.putInt("SeekFull", seekFull);
+        pFrag.setArguments(bundle);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, pFrag)
+                .commit();
+    }
+
     private boolean isMiniPlayerActive() {
-        return true;
+        return false;
     }
 
     public MusicPlayerService getMusicPlayerService() {

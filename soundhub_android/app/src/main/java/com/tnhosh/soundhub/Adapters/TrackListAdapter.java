@@ -42,7 +42,6 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
     @Override
     public void onBindViewHolder(TrackListAdapter.ViewHolder holder, final int position) {
         final Track track = tracks.get(position);
-        //holder.trackName.setText(track.getName());
 
         holder.TrackId = track.getId();
 

@@ -8,6 +8,7 @@
     android:rowCount="3">
 
     <ImageView
+        android:id="@+id/hide_player_big"
         android:layout_row="0"
         android:src="@drawable/ic_player_hide"
         android:layout_marginStart="30dp"
@@ -16,6 +17,7 @@
         android:layout_height="32dp"/>
 
     <ImageView
+        android:id="@+id/track_image_big"
         android:layout_row="1"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
@@ -39,6 +41,7 @@
             android:paddingHorizontal="30dp">
 
             <TextView
+                android:id="@+id/seek_current"
                 android:layout_column="0"
                 android:layout_width="wrap_content"
                 android:text="0:10"
@@ -46,6 +49,7 @@
                 android:layout_gravity="left"/>
 
             <TextView
+                android:id="@+id/seek_full"
                 android:layout_column="1"
                 android:layout_width="wrap_content"
                 android:text="2:28"
@@ -61,6 +65,7 @@
             android:layout_weight="1" />
 
         <TextView
+            android:id="@+id/track_name_big"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -70,6 +75,7 @@
             android:layout_marginBottom="5dp"/>
 
         <TextView
+            android:id="@+id/author_name_big"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
@@ -85,7 +91,9 @@
 
             <TableRow
                 android:paddingVertical="20dp">
+
                 <ImageView
+                    android:id="@+id/like_btn_big"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -93,6 +101,7 @@
 
 
                 <ImageView
+                    android:id="@+id/prev_btn_big"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -102,6 +111,7 @@
 
 
                 <ImageView
+                    android:id="@+id/play_btn_big"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:minHeight="48dp"
@@ -111,6 +121,7 @@
 
 
                 <ImageView
+                    android:id="@+id/next_btn_big"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -120,6 +131,7 @@
 
 
                 <ImageView
+                    android:id="@+id/repeat_btn_big"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

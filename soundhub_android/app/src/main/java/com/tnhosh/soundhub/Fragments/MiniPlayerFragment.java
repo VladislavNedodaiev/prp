@@ -8,12 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.tnhosh.soundhub.Models.Track;
+import com.squareup.picasso.Picasso;
+import com.tnhosh.soundhub.MainActivity;
 import com.tnhosh.soundhub.R;
 import com.tnhosh.soundhub.Services.MusicPlayerService;
-
-import java.util.Date;
 
 public class MiniPlayerFragment extends Fragment {
 
@@ -31,23 +31,36 @@ public class MiniPlayerFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        ImageView playBtn = getView().findViewById(R.id.imageView3);
+        ImageView playBtn = getView().findViewById(R.id.playPauseButton);
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onPlayClick(v);
+                onPlayPauseClick(v);
             }
         });
+
+        Bundle b = this.getArguments();
+        if (b != null) {
+            TextView trackName = getView().findViewById(R.id.track_name_mini);
+            ImageView trackImg = getView().findViewById(R.id.track_image_mini);
+            trackName.setText(b.getString("TrackName"));
+            Picasso.get().load(b.getString("ImageUrl")).into(trackImg);
+            playBtn.setImageDrawable(getContext().getDrawable(R.drawable.ic_pause));
+        }
     }
 
-    final String AUDIO_URL = "https://muzwave.net/uploads/files/2019-05/1556948728_1-06_-pnb-rock-middle-child-feat_-xxxtentacion.mp3";
-
-    public void onPlayClick(View view) {
-        ImageView playBtn = getView().findViewById(R.id.imageView3);
-        playBtn.setImageDrawable(getContext().getDrawable(R.drawable.ic_pause));
-
-        MusicPlayerService player = new MusicPlayerService(getActivity());
-        player.loadTrack(new Track(10, 0, "", new Date(324243242), 180, AUDIO_URL));
+    public void onPlayPauseClick(View view) {
+        MainActivity ma = (MainActivity) getActivity();
+        MusicPlayerService player = ma.getMusicPlayerService();
+        if (player.isPlaying()) {
+            ImageView playBtn = getView().findViewById(R.id.playPauseButton);
+            playBtn.setImageDrawable(getContext().getDrawable(R.drawable.ic_play));
+            player.pause();
+        } else {
+            ImageView playBtn = getView().findViewById(R.id.playPauseButton);
+            playBtn.setImageDrawable(getContext().getDrawable(R.drawable.ic_pause));
+            player.play();
+        }
     }
 
 }

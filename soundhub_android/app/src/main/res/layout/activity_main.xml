@@ -37,8 +37,7 @@
         android:layout_height="50dp"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:onClick="onMiniPlayerClick">
+        app:layout_constraintStart_toStartOf="parent">
 
     </FrameLayout>
 
