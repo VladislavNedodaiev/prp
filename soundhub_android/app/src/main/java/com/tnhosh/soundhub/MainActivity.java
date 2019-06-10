@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.annotation.NonNull;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.tnhosh.soundhub.Fragments.HomeFragment;
 import com.tnhosh.soundhub.Fragments.LibraryFragment;
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Track currTrack = player.getCurrentTrack();
         UsersApi ua = new UsersApiImpl();
         User currUser = ua.getUserById(currTrack.getUserId());
-        updatePlayer(currUser.getImageUrl(), currTrack.getName(), currUser.getLogin(), 120, 300);
+        loadPlayer(currUser.getImageUrl(), currTrack.getName(), currUser.getLogin(), player.getCurrentPosition(), player.getDuration());
         hideMiniPlayer();
         currentFragment = new PlayerFragment();
     }
@@ -115,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         showMiniPlayer();
     }
 
-    public void updatePlayer(String imageUrl, String trackName, String authorName, int seekPosition, int seekFull) {
+    public void loadPlayer(String imageUrl, String trackName, String authorName, int seekPosition, int seekFull) {
         PlayerFragment pFrag = new PlayerFragment();
         Bundle bundle = new Bundle();
         bundle.putString("ImageUrl", imageUrl);
@@ -153,4 +152,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onDestroy();
         player.releaseMP();
     }
+
+
 }

@@ -89,6 +89,18 @@ public class MusicPlayerService {
         return currentTrack;
     }
 
+    public void seekTo(int position) {
+        player.seekTo(position);
+    }
+
+    public int getDuration() {
+        return player.getDuration();
+    }
+
+    public int getCurrentPosition() {
+        return player.getCurrentPosition();
+    }
+
     public void releaseMP() {
         try {
             player.release();
