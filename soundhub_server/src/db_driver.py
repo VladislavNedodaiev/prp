@@ -115,7 +115,7 @@ class TrackDriver:
             return jsonify({'message': str(e)}), 400
         return jsonify(user)
 
-    def upload(self, title, band, author, file, user: User, playlist: Playlist):
+    def upload(self, title, band, author, file, user: User):
         try:
             self._allowed_audio(file.filename)
         except InvalidFile:
@@ -132,6 +132,7 @@ class TrackDriver:
             raise PermissionError()
 
         track.save()
+        return track
 
     def add_to_playlist(self, username, playlist, track: Track):
         pass

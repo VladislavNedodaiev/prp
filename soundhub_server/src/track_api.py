@@ -10,29 +10,36 @@ from src.playlist_api import _playlist_data_to_dict
 
 playlist_api = Blueprint('track_api', __name__)
 
-@playlist_api.route("/<string:playlist_title>/<string:band>/<string:song_title>", methods=['GET'])
-def create_track():
-    pass
+@playlist_api.route("/<string:username>/", methods=['POST'])
+def create_track(username: str):
+    try:
+        driver = TrackDriver()
+        
+        user = UserDriver().get_by_username(username)
+        file = request.files['file']
+        data = json.loads(request.data)
+        track = driver.create_track(data["title"], data["band"], data["author"], file, user)
+        response = _track_data_to_dict(track)
+        return jsonify(response), 200
+    except (UserDoesNotExists, InvalidFile)as e:
+        return jsonify({'message': str(e)})
+    except exceptions.HTTPException:
+        return jsonify({'message': "Missing 'file' key"}), 400
+    except Exception as e:
+        return jsonify({'message': str(e)})
 
-@playlist_api.route("/<string:playlist_title>/<string:band>/<string:song_title>", methods=['GET'])
+@playlist_api.route("/<string:song_title>/<string:band>", methods=['GET'])
 def get_track(playlist_title: str, band: str, song_title: str):
     driver = TrackDriver()
-    p_driver = PlaylistDriver()
 
     try:
         track = driver.get(band, song_title)
-        playlist = driver.get(track.username, playlist_title)
     except (TrackDoesNotExists) as e:
         return jsonify({'message': str(e)}), 400
     except Exception as e:
         return jsonify({'message': str(e)}), 400
 
-    res = []
-    res.append(_playlist_data_to_dict(playlist))
-    res.append(_track_data_to_dict(track))
-
-    return jsonify(res), 200
-
+    return jsonify(_track_data_to_dict(track)), 200
 
 @playlist_api.route("/<string:playlist_title>/<string:band>/<string:song_title>/like", methods=['POST'])
 def like_track(playlist_title: str, band: str, song_title: str):
@@ -43,7 +50,7 @@ def like_track(playlist_title: str, band: str, song_title: str):
 
     try:
         user = u_driver.get_by_username(username)
-        track = t_driver.
+        track = t_driver.get_track(song_title, band)
     except (TrackDoesNotExists) as e:
         return jsonify({'message': str(e)}), 400
     except Exception as e:
