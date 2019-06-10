@@ -4,7 +4,6 @@ class user {
 	
 	var $user_id;
 	var $login;
-	var $password;
 	var $photo;
 	var $description;
 	var $phone;
@@ -20,7 +19,6 @@ class user {
 		
 		$this->user_id = $res['user_id'];
 		$this->login = $res['login'];
-		$this->password = $res['password'];
 		$this->photo = $res['photo'];
 		$this->description = $res['description'];
 		$this->phone = $res['phone'];
@@ -88,14 +86,14 @@ class user {
 	}
 	
 	// reloads the account from database
-	function reload_db() {
+	function getById($id) {
 
 		$mysqli = (include "../scripts/connectdb.php");
 		
 		if ($mysqli->connect_errno)
 			return mysqli_connect_error();
 		
-		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE `user`.`login`='".$this->user_id."';")) {
+		if ($result = $mysqli->query("SELECT `user`.* FROM `user` WHERE `user`.`login`='".$id."';")) {
 			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
 				$this->set_from_qresult($res);
 				return true;
@@ -107,7 +105,7 @@ class user {
 	}
 	
 	// updates the database 
-	function update_db() {
+	function update() {
 
 		$mysqli = (include "../scripts/connectdb.php");
 		
@@ -126,6 +124,40 @@ class user {
 			return true;
 		
 		return false;
+		
+	}
+	
+	function getTotalLikes() {
+		
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return 0;
+		
+		if ($result = $mysqli->query("SELECT COUNT(`tu_like`.`tu_like_id`) AS likes FROM `tu_like`, `track` WHERE `tu_like`.`track_id`=`track`.`track_id` AND `track`.`user_id`='".$this->user_id."';")) {
+			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+				return $res['likes'];
+			}
+		}
+		
+		return 0;
+		
+	}
+	
+	function getTotalFollowers() {
+		
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return 0;
+		
+		if ($result = $mysqli->query("SELECT COUNT(`subscriber`.`subscriber_id`) AS subscribers FROM `subscriber`, `subscription` WHERE `subscriber`.`subscriber_id`=`subscription`.`subscriber_id` AND `subscription`.`user_id`='".$this->user_id."';")) {
+			if ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+				return $res['subscribers'];
+			}
+		}
+		
+		return 0;
 		
 	}
 	

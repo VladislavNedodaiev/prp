@@ -71,7 +71,19 @@ if (!isset($_SESSION))
 				<h5 class="text-dark my-0">LIBRARY</h4>
 			</a>
 			
-			<div class="col"></div>
+			<div class="col">
+				<div class="row" style="width:100%;">
+					<div class="container justify-content-center d-flex align-items-center text-muted">
+						<a id="currentauthor" value=""></a>
+						<span id="currenttrackname">Select music</a>
+					</div>
+					<div class="container" style="width:100%;">
+						<audio id="currentmusic" style="width: 100%; height: 2rem" controls src="">
+								Your browser does not support the <code>audio</code> element.
+						</audio>
+					</div>
+				</div>
+			</div>
 			
 			<a id="profilebutton"  class="menubutton col-1 justify-content-center d-flex align-items-center <?php if (strtok($_SERVER['REQUEST_URI'], '?')=='/soundhub/profile.php') echo ' orange darken-1'; ?>" style="height: 100%">
 				<h5 class="text-dark my-0">ACCOUNT</h4>
@@ -87,7 +99,7 @@ if (!isset($_SESSION))
 					$('.menubutton').removeClass('orange darken-1');
 					$('#homebutton').addClass('orange darken-1');
 					
-					let query="home.php";
+					let query="templates/home.php";
 					sendxmlhttp(query);
 				});
 				
@@ -95,7 +107,7 @@ if (!isset($_SESSION))
 					$('.menubutton').removeClass('orange darken-1');
 					$(this).addClass('orange darken-1');
 					
-					query="home.php";
+					query="templates/home.php";
 					sendxmlhttp(query);
 				});
 				
@@ -103,7 +115,7 @@ if (!isset($_SESSION))
 					$('.menubutton').removeClass('orange darken-1');
 					$(this).addClass('orange darken-1');
 					
-					query="alert.php";
+					query="templates/library.php";
 					sendxmlhttp(query);
 				});
 				
@@ -111,7 +123,7 @@ if (!isset($_SESSION))
 					$('.menubutton').removeClass('orange darken-1');
 					$(this).addClass('orange darken-1');
 					
-					query="alert.php";
+					query="templates/profile.php";
 					sendxmlhttp(query);
 				});
 				
@@ -119,8 +131,15 @@ if (!isset($_SESSION))
 					$('.menubutton').removeClass('orange darken-1');
 					$(this).addClass('orange darken-1');
 					
-					query="alert.php";
+					query="templates/upload.php";
 					sendxmlhttp(query);
+				});
+				
+				$( "#currentauthor" ).click(function() {
+					$('.menubutton').removeClass('orange darken-1');
+					$('#profilebutton').addClass('orange darken-1');
+					
+					sendxmlhttp($('currentauthor').value);
 				});
 				
 				function sendxmlhttp(query) {
@@ -129,7 +148,6 @@ if (!isset($_SESSION))
 					xmlhttp.onreadystatechange = function() {
 						if (this.readyState == 4 && this.status == 200) {
 							document.getElementById('contentContainer').innerHTML = this.responseText;
-							}
 						}
 					};
 					xmlhttp.open("POST", query, false);
