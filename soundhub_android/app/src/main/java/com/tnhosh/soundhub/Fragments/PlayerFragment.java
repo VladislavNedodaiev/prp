@@ -36,8 +36,8 @@ public class PlayerFragment extends Fragment {
     TextView seekFull;
     ImageView playBtn;
     ImageView hideBtn;
-    Button prevBtn;
-    Button nextBtn;
+    ImageView prevBtn;
+    ImageView nextBtn;
 
 
     public PlayerFragment() {
