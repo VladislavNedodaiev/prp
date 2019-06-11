@@ -1,6 +1,14 @@
 <?php 
 
-include "../classes/user.php";
+if (!class_exists('user'))
+	include "../classes/user.php";
+if (!class_exists('track'))
+	include "../classes/track.php";
+if (!class_exists('playlist'))
+	include "../classes/playlist.php";
+if (!class_exists('tu_like'))
+	include "../classes/tu_like.php";
+
 $mysqli = include "../scripts/connectdb.php";
 
 if (!$mysqli) {
@@ -21,7 +29,7 @@ $usr = null;
 if (isset($_SESSION['user']) && !isset($_POST['user_id']) || 
 	isset($_SESSION['user']) && isset($_POST['user_id']) && $_SESSION['user']->user_id == $_POST['user_id'])
 	$usr=$_SESSION['user'];
-else if (!isset($_GET['user_id'])) { 
+else if (!isset($_POST['user_id'])) { 
 
 	$_SESSION['msg']['type']="alert-danger";
 	$_SESSION['msg']['text']="No such user can be found!";
@@ -33,7 +41,7 @@ else {
 
 	$usr = new user;
 
-	if (!($usr->getById($_GET['user_id']))) { 
+	if (!($usr->getById($_POST['user_id']))) { 
 	
 		$_SESSION['msg']['type']="alert-danger";
 		$_SESSION['msg']['text']="No such user can be found!";
@@ -117,5 +125,9 @@ else {
 				</div>
 			</div>
 		</div>
+		
+		<?php include "../templates/short_likes.php"; ?>
+		<?php include "../templates/short_playlists.php"; ?>
+		<?php include "../templates/short_subscriptions.php"; ?>
 	</div>
 </div>

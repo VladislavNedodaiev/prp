@@ -122,6 +122,94 @@ class track {
 		
 	}
 	
+	function getFromToByLen($position, $length) {
+		
+		$tracks = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $tracks;
+		
+		if ($result = $mysqli->query("SELECT `track`.* FROM `track` LIMIT ".$position." OFFSET ".$length.";")) {
+			while ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+
+				$ttrack = new track;
+				$ttrack->set_from_qresult($res);
+				
+				$tracks[$ttrack->track_id]=$ttrack;
+			}
+		}
+		
+		return $tracks;
+		
+	}
+	
+	function getLikedFromToByLenUser($position, $length, $usr_id) {
+		
+		$tracks = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $tracks;
+		
+		if ($result = $mysqli->query("SELECT `track`.* FROM `track`, `tu_like` WHERE `tu_like`.`user_id`='".$usr_id."' AND `tu_like`.`track_id`=`track`.`track_id` LIMIT ".$length." OFFSET ".$position.";")) {
+			while ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+
+				$ttrack = new track;
+				$ttrack->set_from_qresult($res);
+				
+				$tracks[$ttrack->track_id]=$ttrack;
+			}
+		}
+		
+		return $tracks;
+		
+	}
+	
+	function getAllLikedByUser($usr_id) {
+		
+		$tracks = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $tracks;
+		
+		if ($result = $mysqli->query("SELECT `track`.* FROM `track`, `tu_like` WHERE `tu_like`.`user_id`='".$usr_id."' AND `tu_like`.`track_id`=`track`.`track_id`;")) {
+			while ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+
+				$ttrack = new track;
+				$ttrack->set_from_qresult($res);
+				
+				$tracks[$ttrack->track_id]=$ttrack;
+			}
+		}
+		
+		return $tracks;
+		
+	}
+	
+	function getAll() {
+		
+		$tracks = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $tracks;
+		
+		if ($result = $mysqli->query("SELECT `track`.* FROM `track`;")) {
+			while ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+
+				$ttrack = new track;
+				$ttrack->set_from_qresult($res);
+				
+				$tracks[$ttrack->track_id]=$ttrack;
+			}
+		}
+		
+		return $tracks;
+		
+	}
+	
 }
 
 ?>

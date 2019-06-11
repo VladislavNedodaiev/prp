@@ -132,6 +132,13 @@ class user {
 
 		$mysqli = (include "../scripts/connectdb.php");
 		
+		return "UPDATE `user` SET "
+						   ."`photo`='".$this->photo."', "
+						   ."`description`='".$this->description."', "
+						   ."`phone`='".$this->phone."', "
+						   ."`money`='".$this->money."' "
+						   ."WHERE `user_id`=".$this->user_id.";";
+		
 		if ($mysqli->connect_errno)
 			return mysqli_connect_error();
 		
@@ -139,10 +146,7 @@ class user {
 						   ."`photo`='".$this->photo."', "
 						   ."`description`='".$this->description."', "
 						   ."`phone`='".$this->phone."', "
-						   ."`money`='".$this->money."', "
-						   ."`premium`='".$this->premium."', "
-						   ."`premium_date`=STR_TO_DATE('".$this->premium_date."', '%Y-%m-%d %H:%i:%s'), "
-						   ."`premium_duration`='".$this->premium_duration."' "
+						   ."`money`='".$this->money."' "
 						   ."WHERE `user_id`=".$this->user_id.";"))
 			return true;
 		

@@ -161,6 +161,28 @@ class playlist {
 		
 	}
 	
+	function getFromToByLenUser($position, $length, $usr_id) {
+		
+		$playlists = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $playlists;
+		
+		if ($result = $mysqli->query("SELECT `playlist`.* FROM `playlist` WHERE `playlist`.`user_id`='".$usr_id."' LIMIT ".$length." OFFSET ".$position.";")) {
+			while ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+
+				$pllst = new playlist;
+				$pllst->set_from_qresult($res);
+				
+				$playlists[$pllst->playlist_id]=$pllst;
+			}
+		}
+		
+		return $playlists;
+		
+	}
+	
 }
 
 ?>

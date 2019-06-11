@@ -182,6 +182,28 @@ class subscription {
 		
 	}
 	
+	function getFromToByLenFromUser($position, $length, $usr_id) {
+		
+		$subscriptions = NULL;
+		$mysqli = (include "../scripts/connectdb.php");
+		
+		if ($mysqli->connect_errno)
+			return $subscriptions;
+		
+		if ($result = $mysqli->query("SELECT `subscription`.* FROM `subscription` WHERE `subscription`.`user_from_id`='".$usr_id."' LIMIT ".$length." OFFSET ".$position.";")) {
+			while ($res = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+
+				$scription = new subscription;
+				$scription->set_from_qresult($res);
+				
+				$subscriptions[$scription->subscription_id]=$scription;
+			}
+		}
+		
+		return $subscriptions;
+		
+	}
+	
 }
 
 ?>

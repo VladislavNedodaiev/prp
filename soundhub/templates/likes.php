@@ -1,4 +1,3 @@
-
 <?php
 
 if (!class_exists('user'))
@@ -16,7 +15,7 @@ if (!isset($_SESSION))
 	session_start();
 
 $ttrack = new track;
-$tracks['track'] = $ttrack->getAll();
+$tracks['track'] = $ttrack->getAllLikedByUser($_SESSION['user']->user_id);
 
 $usrtracks = NULL;
 if ($tracks['track']) {
@@ -34,6 +33,14 @@ $tracks['user']=$usrtracks;
 ?>
 
 <div class="container mx-0 px-0" style="min-height: 25rem;">
+	<div class="row mx-0 px-0 border-bottom">
+		<div class="col my-auto">
+			<h2>Likes</h2>
+		</div>
+		<div class="col text-right my-auto">
+			<a value="templates/library.php" href="#" class="buttonjq"><h4 class="text-muted">Back to library</h4></a>
+		</div>
+	</div>
 
 	<?php 
 	if ($tracks['track']) {
@@ -44,7 +51,7 @@ $tracks['user']=$usrtracks;
 			<a href="#" value="templates/profile.php?user_id=<?php echo $tt->user_id; ?>" class="buttonjq">
 			<img class="card-img-top"
 				 src="<?php
-					 if ($tracks['user'][$tt->track_id]->photo && file_exists($tracks['user'][$tt->track_id]->photo)) echo $tracks['user'][$tt->track_id]->photo;
+					 if ($tracks['user'][$tt->track_id]->photo && file_exists('../'+$tracks['user'][$tt->track_id]->photo)) echo '../'+$tracks['user'][$tt->track_id]->photo;
 					 else echo "images/default_user.jpg";?>" 
 				 alt="<?php echo $tracks['user'][$tt->track_id]->login;?>">
 			</a>
@@ -65,12 +72,4 @@ $tracks['user']=$usrtracks;
 		}
 	} 
 	?>
-	<div class="col-4">
-		<div class="container">
-		</div>
-		<div class="container">
-		</div>
-		<div class="container">
-		</div>
-	</div>
 </div>

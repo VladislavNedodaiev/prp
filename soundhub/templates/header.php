@@ -37,7 +37,7 @@ if (!isset($_SESSION))
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.3/js/mdb.min.js"></script>
 	</head>
 
-	<body style="background-color: rgba(215, 215, 215, 1); word-wrap: break-word; overflow-y: hidden;">
+	<body style="background-color: rgba(215, 215, 215, 1); word-wrap: break-word; overflow-x: hidden;">
 	
 		<div class="row orange lighten-1 mx-0 px-0" style="height: 4rem;">
 			
@@ -105,6 +105,6 @@ if (!isset($_SESSION))
 		
 		<div class = "card bg-white">
 		<div class = "content mx-auto my-5" style="background-color: #FFF; width: 75%">
-		
+
 		<div id = "contentContainer" class = "container">
 		<?php include "templates/alert.php"; ?>

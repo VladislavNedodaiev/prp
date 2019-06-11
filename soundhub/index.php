@@ -3,7 +3,7 @@
 
 	<?php 
 	if (!isset($_SESSION['user'])) include "templates/home_unauthorized.php";
-	else include "templates/home.php"; 
+	else include "templates/home.php";
 	?>
 	
 	
