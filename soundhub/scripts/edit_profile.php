@@ -5,28 +5,27 @@ include "../classes/user.php";
 header('Content-Type: text/html; charset=utf-8');
 session_start();
 
-return $_GET['phone'];
-if (!isset($_SESSION['user']) || !isset($_POST)) {
+if (!isset($_SESSION['user']) || !isset($_GET)) {
 	exit;
 }
 
 $account=$_SESSION['user'];
 
 $newpath = "";
-if (isset($_FILES['photoinput']['name']) && $_FILES['photoinput']['tmp_name'] != "") {
+if (isset($_FILES['file']['name']) && $_FILES['file']['tmp_name'] != "") {
 	
-	$imageFileType = strtolower(pathinfo(basename($_FILES['photoinput']['name']),PATHINFO_EXTENSION));
+	$imageFileType = strtolower(pathinfo(basename($_FILES['file']['name']),PATHINFO_EXTENSION));
 	$newpath = '../images/users/'.$account->login.'.'.$imageFileType;
-	$moveResult = move_uploaded_file($_FILES['photoinput']['tmp_name'], $newpath);
+	$moveResult = move_uploaded_file($_FILES['file']['tmp_name'], $newpath);
 	if ($moveResult)
-		$account->photo=$newpath;	
+		$account->photo=$account->login.'.'.$imageFileType;	
 	
 }
 
-if (isset($_POST['phone']))
-	$account->phone = $_POST['phone'];
-if (isset($_POST['description']))
-	$account->description = $_POST['description'];
+if (isset($_GET['phone']))
+	$account->phone = $_GET['phone'];
+if (isset($_GET['description']))
+	$account->description = $_GET['description'];
 
 $result = $account->update();
 
@@ -45,7 +44,7 @@ if ($result === true) {
 }
 else if ($result != false) {
 
-	$_SESSION['msg']['type'] = "alert-success";
+	$_SESSION['msg']['type'] = "alert-danger";
 	$_SESSION['msg']['text'] = "Error occured: ".$result;
 	?>
 	

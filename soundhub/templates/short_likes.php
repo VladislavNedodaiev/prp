@@ -48,11 +48,12 @@ if ($tracks['track']) {
 <div class="row mx-0 px-0">
 	<div class="col-1">
 		<a href="#" value="templates/profile.php?user_id=<?php echo $tt->user_id; ?>" class="buttonjq">
-		<img class="card-img-top"
-			 src="<?php
-				 if ($tracks['user'][$tt->track_id]->photo && file_exists('../'+$tracks['user'][$tt->track_id]->photo)) echo '../'+$tracks['user'][$tt->track_id]->photo;
-				 else echo "images/default_user.jpg";?>" 
-			 alt="<?php echo $tracks['user'][$tt->track_id]->login;?>">
+
+			<img class="card-img-top" style="cursor: pointer"
+				src="<?php
+					if ($tracks['user'][$tt->track_id]->photo && file_exists("../images/users/".$tracks['user'][$tt->track_id]->photo)) echo "images/users/".$tracks['user'][$tt->track_id]->photo;
+					else echo "images/default_user.jpg";?>" 
+				alt="<?php echo $tracks['user'][$tt->track_id]->login;?>">
 		</a>
 	</div>
 	<div class="col">

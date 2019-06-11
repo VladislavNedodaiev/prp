@@ -53,7 +53,7 @@ if ($playlists['playlist']) {
 	<a href="#" class="buttonjq" value="templates/playlist?playlist_id=<?php $plist->playlist_id; ?>">
 	
 	<img class="card-img-top" src="<?php
-					 if ($plist->photo && file_exists($plist->photo)) echo $plist->photo ;
+					 if ($plist->photo && file_exists("../images/playlists/".$plist->photo)) echo "images/playlists/".$plist->photo ;
 					 else echo "images/default_user.jpg";?>" 
 				alt="<?php echo $plist->title; ?>">
 	</a>

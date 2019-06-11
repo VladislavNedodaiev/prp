@@ -1,5 +1,11 @@
 <script>
 
+$(document).ready(function() {
+	
+	sendxmlhttp("templates/home.php");
+	
+});
+
 $( ".menubutton" ).click(function() {
 	$('.menubutton').removeClass('orange darken-1');
 	if ($(this).attr('id') != 'soundhubbutton')
@@ -10,7 +16,10 @@ $( ".menubutton" ).click(function() {
 
 $(document).on('click', ".buttonjq", function() {
 	
-	sendxmlhttp($(this).attr('value'));
+	if ($(this).val() != "")
+		sendxmlhttp($(this).val());
+	else 
+		sendxmlhttp($(this).attr('value'));
 	
 });
 
@@ -38,30 +47,18 @@ $(document).on('click', "#submit_upload", function() {
 	
 });
 
-function sendxmlhttp(query) {
-
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			document.getElementById('contentContainer').innerHTML = this.responseText;
-		}
-	};
-	xmlhttp.open("POST", query, false);
-	xmlhttp.send();
-	
-}
-
 function sendxmlhttp(query, fl) {
 
 	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.file = fl;
+	var formData = new FormData();
+	formData.append('file', fl);
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			document.getElementById('contentContainer').innerHTML = this.responseText;
 		}
 	};
-	xmlhttp.open("POST", query, false);
-	xmlhttp.send();
+	xmlhttp.open("POST", query, true);
+	xmlhttp.send(formData);
 	
 }
 

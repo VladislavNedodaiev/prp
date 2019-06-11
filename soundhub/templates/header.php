@@ -39,7 +39,7 @@ if (!isset($_SESSION))
 
 	<body style="background-color: rgba(215, 215, 215, 1); word-wrap: break-word; overflow-x: hidden;">
 	
-		<div class="row orange lighten-1 mx-0 px-0" style="height: 4rem;">
+		<div class="row sticky-top orange lighten-1 mx-0 px-0" style="height: 4rem;">
 			
 			<?php if (!isset($_SESSION['user'])) { ?>
 			

@@ -53,10 +53,11 @@ $playlists['user']=$usrplaylists;
 
 		<a href="#" class="buttonjq" value="templates/playlist?playlist_id=<?php $plist->playlist_id; ?>">
 		
-		<img class="card-img-top" src="<?php
-						 if ($plist->photo && file_exists($plist->photo)) echo $plist->photo ;
-						 else echo "images/default_user.jpg";?>" 
-					alt="<?php echo $plist->title; ?>">
+		<img class="card-img-top" style="cursor: pointer"
+			src="<?php
+				if ($usr->photo && file_exists("../images/playlists/".$usr->photo)) echo "images/playlists/".$usr->photo;
+				else echo "images/default_user.jpg";?>" 
+			alt="<?php echo $usr->login;?>">
 		</a>
 		
 		<div class="card-header text-center">

@@ -29,7 +29,7 @@ $playlists = $p->getPlaylistsByUserId($_SESSION['user']->user_id);
 		<div class="input-group-prepend">
 			<span class="input-group-text"> <i class="fas fa-font"></i> </span>
 		</div>
-		<input name="uploadtrackname" class="form-control" placeholder="Track name" type="text" required>
+		<input name="uploadtrackname" id="uploadtrackname" class="form-control" placeholder="Track name" type="text" required>
 	</div>
 	
 	<div class="form-group">

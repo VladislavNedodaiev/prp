@@ -44,6 +44,7 @@ else {
 }
 
 ?>
+
 <div class="justify-content-center d-flex align-items-center">
 	<div class="card" style="width: 60rem;">
 		<div class="card-header">
@@ -65,7 +66,7 @@ else {
 						
 						<label style="margin: -1px" for="photoinput"><img class="card-img-top" style="cursor: pointer"
 							src="<?php
-								if ($usr->photo && file_exists($usr->photo)) echo $usr->photo;
+								if ($usr->photo && file_exists("../images/users/".$usr->photo)) echo "images/users/".$usr->photo;
 								else echo "images/default_user.jpg";?>" 
 							alt="<?php echo $usr->login;?>"></label>
 						<input type="file" style="display: none" accept="image/png, image/jpeg" class="form-control-file" name="photoinput" id="photoinput">

@@ -54,7 +54,7 @@ $subscriptions['user']=$usrsubscrs;
 		<a href="#" class="buttonjq" value="templates/profile?user_id=<?php $scription->user_to_id; ?>">
 		
 		<img class="card-img-top" src="<?php
-						 if ($subscriptions['user'][$scription->subscription_id]->photo && file_exists($subscriptions['user'][$scription->subscription_id]->photo)) echo $subscriptions['user'][$scription->subscription_id]->photo ;
+						 if ($subscriptions['user'][$scription->subscription_id]->photo && file_exists("../images/users/".$subscriptions['user'][$scription->subscription_id]->photo)) echo "images/users/".$subscriptions['user'][$scription->subscription_id]->photo ;
 						 else echo "images/default_user.png";?>" 
 					alt="<?php echo $subscriptions['user'][$scription->subscription_id]->login; ?>">
 		</a>

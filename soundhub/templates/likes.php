@@ -51,7 +51,7 @@ $tracks['user']=$usrtracks;
 			<a href="#" value="templates/profile.php?user_id=<?php echo $tt->user_id; ?>" class="buttonjq">
 			<img class="card-img-top"
 				 src="<?php
-					 if ($tracks['user'][$tt->track_id]->photo && file_exists('../'+$tracks['user'][$tt->track_id]->photo)) echo '../'+$tracks['user'][$tt->track_id]->photo;
+					 if ($tracks['user'][$tt->track_id]->photo && file_exists("../images/users/".$tracks['user'][$tt->track_id]->photo)) echo "images/users/".$tracks['user'][$tt->track_id]->photo;
 					 else echo "images/default_user.jpg";?>" 
 				 alt="<?php echo $tracks['user'][$tt->track_id]->login;?>">
 			</a>

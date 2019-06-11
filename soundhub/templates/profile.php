@@ -70,10 +70,10 @@ else {
 			<div class="row">
 				<div class="col-3 border-right">
 					<div class="card">
-					
-						<img class="card-img-top"
+
+						<img class="card-img-top" style="cursor: pointer"
 							src="<?php
-								if ($usr->photo && file_exists($usr->photo)) echo $usr->photo;
+								if ($usr->photo && file_exists("../images/users/".$usr->photo)) echo "images/users/".$usr->photo;
 								else echo "images/default_user.jpg";?>" 
 							alt="<?php echo $usr->login;?>">
 						
