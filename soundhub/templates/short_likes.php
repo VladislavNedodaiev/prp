@@ -59,10 +59,10 @@ if ($tracks['track']) {
 	<div class="col">
 		<div class="container justify-content-center d-flex align-items-center text-muted">
 			<a id="trackauthor" value="templates/profile.php?user_id=<?php echo $tt->user_id; ?>" href="#"></a>
-			<span id="currenttrackname">Select music</a>
+			<span><?php echo $tt->title; ?></span></a>
 		</div>
 		<div class="container" style="width:100%;">
-			<audio id="track" style="width: 100%; height: 2rem" controls src="<?php echo $tt->audio; ?>">
+			<audio id="track" style="width: 100%; height: 2rem" controls src="<?php echo 'music/'.$tt->audio; ?>">
 					Your browser does not support the <code>audio</code> element.
 			</audio>
 		</div>
