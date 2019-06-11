@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.tnhosh.soundhub.Adapters.IconMenuAdapter;
 import com.tnhosh.soundhub.Adapters.MenuAdapter;
 import com.tnhosh.soundhub.R;
 
@@ -48,7 +49,7 @@ public class LibraryFragment extends Fragment {
         setInitialData();
         RecyclerView rw = getView().findViewById(R.id.library_menu_list);
         rw.setLayoutManager(new LinearLayoutManager(getActivity()));
-        MenuAdapter adapter = new MenuAdapter( getActivity(), menuItems);
+        IconMenuAdapter adapter = new IconMenuAdapter(getActivity(), menuItems);
         rw.setAdapter(adapter);
     }
 
