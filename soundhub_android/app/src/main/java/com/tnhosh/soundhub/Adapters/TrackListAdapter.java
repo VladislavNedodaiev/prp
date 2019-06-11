@@ -45,8 +45,7 @@ public class TrackListAdapter extends RecyclerView.Adapter<TrackListAdapter.View
 
         holder.TrackId = track.getId();
 
-        UsersApiImpl uai = new UsersApiImpl();
-        User user = uai.getUserById(track.getUserId());
+        User user = UsersApiImpl.getInstance().getUserById(track.getUserId());
         holder.trackAuthor.setText(user.getLogin());
 
         holder.trackName.setText(track.getName());

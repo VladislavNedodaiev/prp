@@ -1,8 +1,10 @@
 package com.tnhosh.soundhub;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 public class LaunchActivity extends AppCompatActivity {
@@ -22,21 +24,25 @@ public class LaunchActivity extends AppCompatActivity {
 
     public void signUp(View view) {
         Intent intent = new Intent(this, RegisterActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         //finish();
         startActivity(intent);
     }
 
     public void signIn(View view) {
         Intent intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         //finish();
         startActivity(intent);
     }
 
-    //dummy method
     private boolean isAuthorized() {
-        return true;
+        SharedPreferences settings = getSharedPreferences("Account", MODE_PRIVATE);
+        if (settings.contains("Login")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

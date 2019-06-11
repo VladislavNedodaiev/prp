@@ -1,5 +1,7 @@
 package com.tnhosh.soundhub;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -15,14 +17,18 @@ import com.tnhosh.soundhub.Fragments.PlayerFragment;
 import com.tnhosh.soundhub.Fragments.ProfileFragment;
 import com.tnhosh.soundhub.Models.Track;
 import com.tnhosh.soundhub.Models.User;
-import com.tnhosh.soundhub.Services.Api.Users.UsersApi;
+import com.tnhosh.soundhub.Services.Api.Fingerprint.FingerprintApi;
 import com.tnhosh.soundhub.Services.Api.Users.UsersApiImpl;
 import com.tnhosh.soundhub.Services.MusicPlayerService;
+
+import java.io.ObjectStreamClass;
+import java.io.Serializable;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     Fragment currentFragment;
     Fragment previousFragment;
+    private FingerprintApi api;
 
     MusicPlayerService player = new MusicPlayerService(this);
 
@@ -62,6 +68,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 fragment = new LibraryFragment();
                 break;
             case R.id.navigation_profile:
+                if (hasFingerPrint()) {
+                    Intent intent = new Intent(this, FingerprintActivity.class);
+                    startActivity(intent);
+                }
                 fragment = new ProfileFragment();
                 break;
         }
@@ -76,8 +86,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         previousFragment = currentFragment;
         //loadFragment(new PlayerFragment(), R.id.fragment_container);
         Track currTrack = player.getCurrentTrack();
-        UsersApi ua = new UsersApiImpl();
-        User currUser = ua.getUserById(currTrack.getUserId());
+        User currUser = UsersApiImpl.getInstance().getUserById(currTrack.getUserId());
         loadPlayer(currUser.getImageUrl(), currTrack.getName(), currUser.getLogin(), player.getCurrentPosition(), player.getDuration());
         hideMiniPlayer();
         currentFragment = new PlayerFragment();
@@ -101,6 +110,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         return false;
     }
 
+    private boolean isFingerprintSupported() {
+        // Check for availability and any additional requirements for the api.
+        return (api = FingerprintApi.create(this)) != null && api.isFingerprintSupported();
+    }
+
     public void updateMiniPlayer(String ImageUrl, String TrackName) {
         MiniPlayerFragment mpFrag = new MiniPlayerFragment();
         Bundle bundle = new Bundle();
@@ -112,6 +126,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 .replace(R.id.player_mini_container, mpFrag)
                 .commit();
         showMiniPlayer();
+    }
+
+    public void loadProfileFragment(Fragment fragment) {
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+            currentFragment = fragment;
+        }
     }
 
     public void loadPlayer(String imageUrl, String trackName, String authorName, int seekPosition, int seekFull) {
@@ -145,6 +169,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void showMiniPlayer() {
         View mpFrag = findViewById(R.id.player_mini_container);
         mpFrag.setVisibility(View.VISIBLE);
+    }
+
+    private boolean hasProfileAccess() {
+        return false;
+    }
+
+    private boolean hasFingerPrint() {
+        SharedPreferences settings = getSharedPreferences("Account", MODE_PRIVATE);
+        return settings.getBoolean("HasFingerprint", false);
     }
 
     @Override

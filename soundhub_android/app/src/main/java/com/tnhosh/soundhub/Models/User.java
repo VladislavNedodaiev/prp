@@ -5,12 +5,18 @@ public class User {
     private String login;
     private String password;
     private String ImageUrl;
+    private String cryptoPass;
+    private String email;
+    private boolean hasFingerprint;
 
-    public User(int id, String login, String password, String imageUrl) {
+    public User(int id, String login, String password, String imageUrl, String cryptoPass, String email, boolean hasFingerprint) {
         this.id = id;
         this.login = login;
         this.password = password;
         ImageUrl = imageUrl;
+        this.cryptoPass = cryptoPass;
+        this.email = email;
+        this.hasFingerprint = hasFingerprint;
     }
 
     public String getLogin() {
@@ -45,4 +51,27 @@ public class User {
         this.id = id;
     }
 
+    public String getCryptoPass() {
+        return cryptoPass;
+    }
+
+    public void setCryptoPass(String cryptoPass) {
+        this.cryptoPass = cryptoPass;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isHasFingerprint() {
+        return hasFingerprint;
+    }
+
+    public void setHasFingerprint(boolean hasFingerprint) {
+        this.hasFingerprint = hasFingerprint;
+    }
 }

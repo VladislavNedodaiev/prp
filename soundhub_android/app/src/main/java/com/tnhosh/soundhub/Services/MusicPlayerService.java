@@ -69,8 +69,7 @@ public class MusicPlayerService {
             currentTrack = track;
 
         MainActivity ma = (MainActivity)context;
-        UsersApi ua = new UsersApiImpl();
-        ma.updateMiniPlayer(ua.getUserById(track.getId()).getImageUrl(), track.getName());
+        ma.updateMiniPlayer(UsersApiImpl.getInstance().getUserById(track.getId()).getImageUrl(), track.getName());
     }
 
     public boolean isTrackInPlayer(Track track) {

@@ -118,7 +118,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/sign_in_btn"
+        android:id="@+id/sign_out_btn"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginHorizontal="16dp"

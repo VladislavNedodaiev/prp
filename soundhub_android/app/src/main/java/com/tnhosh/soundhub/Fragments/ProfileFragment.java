@@ -1,5 +1,7 @@
 package com.tnhosh.soundhub.Fragments;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,17 +10,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.tnhosh.soundhub.Adapters.MenuAdapter;
+import com.tnhosh.soundhub.LaunchActivity;
 import com.tnhosh.soundhub.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ProfileFragment extends Fragment {
 
     List<String> menuItems = new ArrayList<>();
     List<String> subscrMenuItems = new ArrayList<>();
+    Button signInBtn;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -57,11 +64,28 @@ public class ProfileFragment extends Fragment {
         rw1.setLayoutManager(new LinearLayoutManager(getActivity()));
         MenuAdapter adapter1 = new MenuAdapter( getActivity(), subscrMenuItems);
         rw1.setAdapter(adapter1);
+
+        signInBtn = getActivity().findViewById(R.id.sign_out_btn);
+        signInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSignOut(v);
+            }
+        });
     }
 
     private void setInitialData() {
         menuItems.add("Change your e-mail");
         menuItems.add("Change your password");
         subscrMenuItems.add("Subscribe to Soundhub Premium");
+    }
+
+    public void onSignOut(View view) {
+        SharedPreferences settings = getActivity().getSharedPreferences("Account", MODE_PRIVATE);
+        SharedPreferences.Editor prefEditor = settings.edit();
+        prefEditor.clear().apply();
+        Intent intent = new Intent(getActivity(), LaunchActivity.class);
+        getActivity().finish();
+        startActivity(intent);
     }
 }
