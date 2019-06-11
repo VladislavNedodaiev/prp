@@ -87,6 +87,10 @@ public class FingerprintOfferActivity extends AppCompatActivity implements Finge
             public void run() {
                 Intent intent = new Intent(fpoActivity, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                SharedPreferences settings = getSharedPreferences("Account", MODE_PRIVATE);
+                SharedPreferences.Editor prefEditor = settings.edit();
+                prefEditor.putBoolean("HasFingerprint", true);
+                prefEditor.apply();
                 finish();
                 startActivity(intent);
             }

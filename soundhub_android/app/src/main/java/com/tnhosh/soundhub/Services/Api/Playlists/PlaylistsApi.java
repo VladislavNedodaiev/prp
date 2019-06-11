@@ -7,4 +7,5 @@ import java.util.List;
 public interface PlaylistsApi {
     List<Playlist> getAllPlaylists();
     Playlist getPlaylistById(int id);
+    Playlist getPlaylistByTrackId(int trackId);
 }

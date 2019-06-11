@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -35,6 +36,8 @@ public class PlayerFragment extends Fragment {
     TextView seekFull;
     ImageView playBtn;
     ImageView hideBtn;
+    Button prevBtn;
+    Button nextBtn;
 
 
     public PlayerFragment() {
@@ -94,6 +97,20 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onHideButtonClick(v);
+            }
+        });
+        nextBtn = getView().findViewById(R.id.next_btn_big);
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onNextBtn(v);
+            }
+        });
+        prevBtn = getView().findViewById(R.id.prev_btn_big);
+        prevBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPrevBtn(v);
             }
         });
 
@@ -171,5 +188,13 @@ public class PlayerFragment extends Fragment {
         long secs = a - (mins * 60);
         String secsStr = String.valueOf(secs);
         return mins + ":" + (secsStr.length() == 1 ? "0" + secsStr : secsStr);
+    }
+
+    private void onNextBtn(View view) {
+
+    }
+
+    private void onPrevBtn(View view) {
+
     }
 }

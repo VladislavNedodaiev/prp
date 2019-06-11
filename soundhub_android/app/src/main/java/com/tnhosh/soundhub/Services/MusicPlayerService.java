@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 
 import com.tnhosh.soundhub.MainActivity;
+import com.tnhosh.soundhub.Models.Playlist;
 import com.tnhosh.soundhub.Models.Track;
 import com.tnhosh.soundhub.Services.Api.Users.UsersApi;
 import com.tnhosh.soundhub.Services.Api.Users.UsersApiImpl;
@@ -108,4 +109,8 @@ public class MusicPlayerService {
         }
         isInited = false;
     }
+
+//    public Playlist getCurrentPlaylist() {
+//
+//    }
 }

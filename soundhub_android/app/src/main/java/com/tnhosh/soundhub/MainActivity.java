@@ -177,7 +177,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private boolean hasFingerPrint() {
         SharedPreferences settings = getSharedPreferences("Account", MODE_PRIVATE);
-        return settings.getBoolean("HasFingerprint", false);
+        boolean b = settings.getBoolean("HasFingerprint", false);
+        return b;
     }
 
     @Override

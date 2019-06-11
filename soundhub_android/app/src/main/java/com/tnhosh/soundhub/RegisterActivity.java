@@ -46,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
             SharedPreferences.Editor prefEditor = settings.edit();
             prefEditor.putString("Login", loginEdit.getText().toString());
             prefEditor.putInt("Id", userId);
-            prefEditor.putBoolean("HasFingerprint", true);
+            //prefEditor.putBoolean("HasFingerprint", true);
             prefEditor.apply();
             finish();
             startActivity(intent);

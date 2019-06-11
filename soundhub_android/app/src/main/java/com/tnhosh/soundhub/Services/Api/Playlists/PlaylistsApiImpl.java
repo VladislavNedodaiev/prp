@@ -28,4 +28,11 @@ public class PlaylistsApiImpl implements PlaylistsApi{
         }
         return null;
     }
+
+    @Override
+    public Playlist getPlaylistByTrackId(int trackId) {
+        return getPlaylistById(0);
+    }
+
+
 }
